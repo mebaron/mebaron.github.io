@@ -1,0 +1,194 @@
+---
+title: next主题美化配置
+date: 2021-12-11 16:14:58
+tags:
+- hexo
+- next
+- 博客
+categories:
+- 技术
+---
+
+# next主题美化配置
+
+### 前言
+
+ 网上关于Hexo的主题美化博客较多，本文用以记录搭建本博客网站过程中使用到的next主题美化配置。给大家做个参考，与大家一起学习进步。
+
+### 常规配置
+
+1、打开**站点**配置文件(hexo的配置文件)`_config.yml`,修改配置。
+
+```
+# Site
+title: baronの博客
+subtitle: '指点江山，激扬文字，粪土当年万户侯。'
+description: '生活、工作、游戏、读书，偶有所得，以此为记。'
+keywords: baron
+author: baron
+language: zh-CN
+timezone: Asia/Shanghai
+```
+
+2、将我们的头像放置在/themes/next/sources/images目录下，打开主题配置文件`_config.yml`，修改配置。
+
+```
+# Sidebar Avatar
+avatar:
+  # Replace the default image and set the url here.
+  url: /images/baron.jpg
+  # If true, the avatar will be dispalyed in circle.
+  rounded: false
+  # If true, the avatar will be rotated with the cursor.
+  rotated: false
+```
+
+### 自定义博客图标
+
+ next博客的默认图标是`H`，不过Next支持修改图标，下面是我的图标：
+
+![img](https://mebaron.cn/images/baron.jpg)
+
+我们需要将我们的图标放置在/themes/next/sources/images目录下，并在主题配置文件中进行如下配置，只需要设置small和medium两个就可以（不同尺寸的图标可以到网上制作）。
+
+```
+favicon:
+  small: /images/baron_16px.ico
+  medium: /images/baron_32px.ico
+  apple_touch_icon: /images/apple-touch-icon-next.png
+  safari_pinned_tab: /images/logo.svg
+```
+
+### 添加点击效果
+
+1、在/themes/next/source/js目录下，新建clicklove.js文件：
+
+```
+cd /themes/next/source/js
+touch clicklove.js
+```
+
+2、将下面的代码粘贴进clicklove.js文件中：
+
+```
+!function(e,t,a){function n(){c(".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}"),o(),r()}function r(){for(var e=0;e<d.length;e++)d[e].alpha<=0?(t.body.removeChild(d[e].el),d.splice(e,1)):(d[e].y--,d[e].scale+=.004,d[e].alpha-=.013,d[e].el.style.cssText="left:"+d[e].x+"px;top:"+d[e].y+"px;opacity:"+d[e].alpha+";transform:scale("+d[e].scale+","+d[e].scale+") rotate(45deg);background:"+d[e].color+";z-index:99999");requestAnimationFrame(r)}function o(){var t="function"==typeof e.onclick&&e.onclick;e.onclick=function(e){t&&t(),i(e)}}function i(e){var a=t.createElement("div");a.className="heart",d.push({el:a,x:e.clientX-5,y:e.clientY-5,scale:1,alpha:1,color:s()}),t.body.appendChild(a)}function c(e){var a=t.createElement("style");a.type="text/css";try{a.appendChild(t.createTextNode(e))}catch(t){a.styleSheet.cssText=e}t.getElementsByTagName("head")[0].appendChild(a)}function s(){return"rgb("+~~(255*Math.random())+","+~~(255*Math.random())+","+~~(255*Math.random())+")"}var d=[];e.requestAnimationFrame=function(){return e.requestAnimationFrame||e.webkitRequestAnimationFrame||e.mozRequestAnimationFrame||e.oRequestAnimationFrame||e.msRequestAnimationFrame||function(e){setTimeout(e,1e3/60)}}(),n()}(window,document);
+```
+
+3、在`\themes\next\layout\_layout.swig`文件末尾添加：
+
+```
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/clicklove.js"></script>
+```
+
+### 添加社交信息
+
+1、打开主题配置`_config.yml`，进行相关参数修改：
+
+```
+# 修改对应的社交信息。
+social:
+  GitHub: https://github.com/mebaron || fab fa-github
+  E-Mail: mailto:ecustbaron@gmail.com || fa fa-envelope
+  #Weibo: https://weibo.com/yourname || fab fa-weibo
+  #Google: https://plus.google.com/yourname || fab fa-google
+  #Twitter: https://twitter.com/yourname || fab fa-twitter
+  #FB Page: https://www.facebook.com/yourname || fab fa-facebook
+  #StackOverflow: https://stackoverflow.com/yourname || fab fa-stack-overflow
+  #YouTube: https://youtube.com/yourname || fab fa-youtube
+  #Instagram: https://instagram.com/yourname || fab fa-instagram
+  #Skype: skype:yourname?call|chat || fab fa-skype
+```
+
+### 添加背景
+
+1、下载相应的资源包：
+
+```
+# 在工作目录执行
+git clone https://github.com/theme-next/theme-next-canvas-nest themes/next/source/lib/canvas-nest
+```
+
+2、在主题配置`themes/next/_config.yml`中做相关参数修改：
+
+```
+# Canvas-nest
+# Dependencies: https://github.com/theme-next/theme-next-canvas-nest
+canvas_nest: # 网络背景
+  enable: true
+  onmobile: true # display on mobile or not
+  color: '0,0,0' # RGB values, use ',' to separate
+  opacity: 0.5 # the opacity of line: 0~1
+  zIndex: -1 # z-index property of the background
+  count: 150 # the number of lines
+```
+
+### 增加文章结束标志
+
+1、在路径/themes/next/layout/_macro文件夹中新建passage-end-tag.swig文件：
+
+```
+# 切换到路径_macro
+cd [_macro路径]
+# 创建passage-end-tag.swig文件
+touch passage-end-tag.swig
+```
+
+2、打开passage-end-tag.swig文件，添加以下内容：
+
+```
+<div>
+    {% if not is_index %}
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    {% endif %}
+</div>
+```
+
+3、打开/themes/next/layout/_macro/post.swig，在post-body之后，post-footer之前，添加以下代码：
+
+```
+<div>
+  {% if not is_index %}
+    {% include 'passage-end-tag.swig' %}
+  {% endif %}
+</div>
+```
+
+4、然后打开主题配置文件`_config.yml`,在末尾添加：
+
+```
+# 文章末尾添加“本文结束”标记
+passage_end_tag:
+  enabled: true
+```
+
+### 添加文章版权信息
+
+1、打开主题配置_config.yml，进行相关参数设置：
+
+```
+creative_commons:
+  license: by-nc-sa
+  sidebar: true
+  post: true
+```
+
+### 添加搜索功能
+
+1、安装hexo-generator-searchdb插件.
+
+```
+cd 文件目录
+npm install hexo-generator-searchdb --save
+```
+
+2、打开**站点**配置文件(hexo的配置文件)`_config.yml`,添加配置:
+
+```
+# 搜索
+search:
+  path: ./public/search.xml
+  field: post
+  format: html
+  limit: 10000
+```

@@ -1,0 +1,122 @@
+---
+title: 使用hexo搭建个人博客
+date: 2021-12-11 16:17:26
+tags:
+- hexo
+- next
+- 博客
+categories:
+- 技术
+---
+
+# 使用hexo搭建个人博客
+
+### 前言
+
+ 目前使用hexo配合github来搭建个人博客十分常见，最近摸索了下相关技术，使用hexo➕GitHub搭建了个人博客，并且使用到了next主题，在此做个总结。
+
+
+
+### 环境准备
+
+1、安装Node.js环境。（Hexo基于Node.js，因此搭建过程需要使用到相关环境）
+
+2、安装Git。（用于与GitHub链接及日常推送）
+
+3、将本地环境的ssh公钥配置到GitHub。
+
+4、初始化本地git配置。
+
+```
+git config --global user.name "GitHub 用户名"
+git config --global user.email "GitHub 邮箱"
+```
+
+5、创建GitHub的仓库。（仓库名使用：用户名.github.io）
+
+### 安装本地Hexo
+
+1、npm一键安装hexo.
+
+```
+# Mac环境。
+sudo npm install -g hexo-cli
+```
+
+2、hexo初始化
+
+```
+# cd到准备的博客目录（如blog）
+cd /blog
+
+# 初始化
+hexo init
+
+# 安装组件
+npm install
+```
+
+3、测试安装结果。
+
+```
+# 生成页面
+hexo g
+
+# 启动预览
+hexo s
+```
+
+此时若在浏览器访问`http://localhost:4000`，如果出现 Hexo 默认页面，则本地博客安装成功。
+
+### 将Hexo推送到GitHub
+
+1、安装推送插件。
+
+```
+# workdir 博客目录（/blog下）
+npm install hexo-deployer-git --save
+```
+
+2、修改工作目录下的`_config.yml` 文件的deploy部分，修改成如下
+
+```
+deploy:
+  type: git
+  repository: git@github.com:用户名/用户名.github.io.git
+  branch: main
+```
+
+3、将Hexo推送到GitHub。
+
+```
+hexo d
+```
+
+4、访问`https://用户名.github.io` 来确认下推送结果。
+
+### 使用next主题
+
+1、到博客目录下载next主题资源。
+
+```
+# cd到博客目录
+git clone https://github.com/next-theme/hexo-theme-next themes/next
+```
+
+2、修改Hexo的 `_config.yml` 中的theme为新主题名称 next，如下
+
+```
+theme: next
+```
+
+3、推送到GitHub。
+
+```
+hexo d
+```
+
+4、访问`https://用户名.github.io` 来确认下推送结果。
+
+### 结语
+
+ 到此，一个简单的个人博客雏形就搭建完毕了。Next主体有许多美化配置，可以让我们的博客更好看。接下来就让我们来看看next的个性化配置。
