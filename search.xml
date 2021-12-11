@@ -11,4 +11,119 @@
         <tag>开始</tag>
       </tags>
   </entry>
+  <entry>
+    <title>使用hexo搭建个人博客</title>
+    <url>/2021/12/11/%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<h1 id="使用hexo搭建个人博客"><a href="#使用hexo搭建个人博客" class="headerlink" title="使用hexo搭建个人博客"></a>使用hexo搭建个人博客</h1><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p> 目前使用hexo配合github来搭建个人博客十分常见，最近摸索了下相关技术，使用hexo➕GitHub搭建了个人博客，并且使用到了next主题，在此做个总结。</p>
+<h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><p>1、安装Node.js环境。（Hexo基于Node.js，因此搭建过程需要使用到相关环境）</p>
+<p>2、安装Git。（用于与GitHub链接及日常推送）</p>
+<p>3、将本地环境的ssh公钥配置到GitHub。</p>
+<p>4、初始化本地git配置。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;GitHub 用户名&quot;</span><br><span class="line">git config --global user.email &quot;GitHub 邮箱&quot;</span><br></pre></td></tr></table></figure>
+
+<p>5、创建GitHub的仓库。（仓库名使用：用户名.github.io）</p>
+<h3 id="安装本地Hexo"><a href="#安装本地Hexo" class="headerlink" title="安装本地Hexo"></a>安装本地Hexo</h3><p>1、npm一键安装hexo.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Mac环境。</span><br><span class="line">sudo npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<p>2、hexo初始化</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># cd到准备的博客目录（如blog）</span><br><span class="line">cd /blog</span><br><span class="line"></span><br><span class="line"># 初始化</span><br><span class="line">hexo init</span><br><span class="line"></span><br><span class="line"># 安装组件</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
+<p>3、测试安装结果。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 生成页面</span><br><span class="line">hexo g</span><br><span class="line"></span><br><span class="line"># 启动预览</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+
+<p>此时若在浏览器访问<code>http://localhost:4000</code>，如果出现 Hexo 默认页面，则本地博客安装成功。</p>
+<h3 id="将Hexo推送到GitHub"><a href="#将Hexo推送到GitHub" class="headerlink" title="将Hexo推送到GitHub"></a>将Hexo推送到GitHub</h3><p>1、安装推送插件。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># workdir 博客目录（/blog下）</span><br><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<p>2、修改工作目录下的<code>_config.yml</code> 文件的deploy部分，修改成如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repository: git@github.com:用户名/用户名.github.io.git</span><br><span class="line">  branch: main</span><br></pre></td></tr></table></figure>
+
+<p>3、将Hexo推送到GitHub。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+<p>4、访问<code>https://用户名.github.io</code> 来确认下推送结果。</p>
+<h3 id="使用next主题"><a href="#使用next主题" class="headerlink" title="使用next主题"></a>使用next主题</h3><p>1、到博客目录下载next主题资源。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># cd到博客目录</span><br><span class="line">git clone https://github.com/next-theme/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
+
+<p>2、修改Hexo的 <code>_config.yml</code> 中的theme为新主题名称 next，如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">theme: next</span><br></pre></td></tr></table></figure>
+
+<p>3、推送到GitHub。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+<p>4、访问<code>https://用户名.github.io</code> 来确认下推送结果。</p>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p> 到此，一个简单的个人博客雏形就搭建完毕了。Next主体有许多美化配置，可以让我们的博客更好看。接下来就让我们来看看next的个性化配置。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>next</tag>
+        <tag>博客</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>next主题美化配置</title>
+    <url>/2021/12/11/next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="next主题美化配置"><a href="#next主题美化配置" class="headerlink" title="next主题美化配置"></a>next主题美化配置</h1><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p> 网上关于Hexo的主题美化博客较多，本文用以记录搭建本博客网站过程中使用到的next主题美化配置。给大家做个参考，与大家一起学习进步。</p>
+<h3 id="常规配置"><a href="#常规配置" class="headerlink" title="常规配置"></a>常规配置</h3><p>1、打开<strong>站点</strong>配置文件(hexo的配置文件)<code>_config.yml</code>,修改配置。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Site</span><br><span class="line">title: baronの博客</span><br><span class="line">subtitle: &#x27;指点江山，激扬文字，粪土当年万户侯。&#x27;</span><br><span class="line">description: &#x27;生活、工作、游戏、读书，偶有所得，以此为记。&#x27;</span><br><span class="line">keywords: baron</span><br><span class="line">author: baron</span><br><span class="line">language: zh-CN</span><br><span class="line">timezone: Asia/Shanghai</span><br></pre></td></tr></table></figure>
+
+<p>2、将我们的头像放置在/themes/next/sources/images目录下，打开主题配置文件<code>_config.yml</code>，修改配置。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Sidebar Avatar</span><br><span class="line">avatar:</span><br><span class="line">  # Replace the default image and set the url here.</span><br><span class="line">  url: /images/baron.jpg</span><br><span class="line">  # If true, the avatar will be dispalyed in circle.</span><br><span class="line">  rounded: false</span><br><span class="line">  # If true, the avatar will be rotated with the cursor.</span><br><span class="line">  rotated: false</span><br></pre></td></tr></table></figure>
+
+<h3 id="自定义博客图标"><a href="#自定义博客图标" class="headerlink" title="自定义博客图标"></a>自定义博客图标</h3><p> next博客的默认图标是<code>H</code>，不过Next支持修改图标，下面是我的图标：</p>
+<p><img src="https://mebaron.cn/images/baron.jpg" alt="img"></p>
+<p>我们需要将我们的图标放置在/themes/next/sources/images目录下，并在主题配置文件中进行如下配置，只需要设置small和medium两个就可以（不同尺寸的图标可以到网上制作）。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">favicon:</span><br><span class="line">  small: /images/baron_16px.ico</span><br><span class="line">  medium: /images/baron_32px.ico</span><br><span class="line">  apple_touch_icon: /images/apple-touch-icon-next.png</span><br><span class="line">  safari_pinned_tab: /images/logo.svg</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加点击效果"><a href="#添加点击效果" class="headerlink" title="添加点击效果"></a>添加点击效果</h3><p>1、在/themes/next/source/js目录下，新建clicklove.js文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd /themes/next/source/js</span><br><span class="line">touch clicklove.js</span><br></pre></td></tr></table></figure>
+
+<p>2、将下面的代码粘贴进clicklove.js文件中：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">!function(e,t,a)&#123;function n()&#123;c(&quot;.heart&#123;width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);&#125;.heart:after,.heart:before&#123;content: &#x27;&#x27;;width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;&#125;.heart:after&#123;top: -5px;&#125;.heart:before&#123;left: -5px;&#125;&quot;),o(),r()&#125;function r()&#123;for(var e=0;e&lt;d.length;e++)d[e].alpha&lt;=0?(t.body.removeChild(d[e].el),d.splice(e,1)):(d[e].y--,d[e].scale+=.004,d[e].alpha-=.013,d[e].el.style.cssText=&quot;left:&quot;+d[e].x+&quot;px;top:&quot;+d[e].y+&quot;px;opacity:&quot;+d[e].alpha+&quot;;transform:scale(&quot;+d[e].scale+&quot;,&quot;+d[e].scale+&quot;) rotate(45deg);background:&quot;+d[e].color+&quot;;z-index:99999&quot;);requestAnimationFrame(r)&#125;function o()&#123;var t=&quot;function&quot;==typeof e.onclick&amp;&amp;e.onclick;e.onclick=function(e)&#123;t&amp;&amp;t(),i(e)&#125;&#125;function i(e)&#123;var a=t.createElement(&quot;div&quot;);a.className=&quot;heart&quot;,d.push(&#123;el:a,x:e.clientX-5,y:e.clientY-5,scale:1,alpha:1,color:s()&#125;),t.body.appendChild(a)&#125;function c(e)&#123;var a=t.createElement(&quot;style&quot;);a.type=&quot;text/css&quot;;try&#123;a.appendChild(t.createTextNode(e))&#125;catch(t)&#123;a.styleSheet.cssText=e&#125;t.getElementsByTagName(&quot;head&quot;)[0].appendChild(a)&#125;function s()&#123;return&quot;rgb(&quot;+~~(255*Math.random())+&quot;,&quot;+~~(255*Math.random())+&quot;,&quot;+~~(255*Math.random())+&quot;)&quot;&#125;var d=[];e.requestAnimationFrame=function()&#123;return e.requestAnimationFrame||e.webkitRequestAnimationFrame||e.mozRequestAnimationFrame||e.oRequestAnimationFrame||e.msRequestAnimationFrame||function(e)&#123;setTimeout(e,1e3/60)&#125;&#125;(),n()&#125;(window,document);</span><br></pre></td></tr></table></figure>
+
+<p>3、在<code>\themes\next\layout\_layout.swig</code>文件末尾添加：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- 页面点击小红心 --&gt;</span><br><span class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;/js/clicklove.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加社交信息"><a href="#添加社交信息" class="headerlink" title="添加社交信息"></a>添加社交信息</h3><p>1、打开主题配置<code>_config.yml</code>，进行相关参数修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 修改对应的社交信息。</span><br><span class="line">social:</span><br><span class="line">  GitHub: https://github.com/mebaron || fab fa-github</span><br><span class="line">  E-Mail: mailto:ecustbaron@gmail.com || fa fa-envelope</span><br><span class="line">  #Weibo: https://weibo.com/yourname || fab fa-weibo</span><br><span class="line">  #Google: https://plus.google.com/yourname || fab fa-google</span><br><span class="line">  #Twitter: https://twitter.com/yourname || fab fa-twitter</span><br><span class="line">  #FB Page: https://www.facebook.com/yourname || fab fa-facebook</span><br><span class="line">  #StackOverflow: https://stackoverflow.com/yourname || fab fa-stack-overflow</span><br><span class="line">  #YouTube: https://youtube.com/yourname || fab fa-youtube</span><br><span class="line">  #Instagram: https://instagram.com/yourname || fab fa-instagram</span><br><span class="line">  #Skype: skype:yourname?call|chat || fab fa-skype</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加背景"><a href="#添加背景" class="headerlink" title="添加背景"></a>添加背景</h3><p>1、下载相应的资源包：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 在工作目录执行</span><br><span class="line">git clone https://github.com/theme-next/theme-next-canvas-nest themes/next/source/lib/canvas-nest</span><br></pre></td></tr></table></figure>
+
+<p>2、在主题配置<code>themes/next/_config.yml</code>中做相关参数修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Canvas-nest</span><br><span class="line"># Dependencies: https://github.com/theme-next/theme-next-canvas-nest</span><br><span class="line">canvas_nest: # 网络背景</span><br><span class="line">  enable: true</span><br><span class="line">  onmobile: true # display on mobile or not</span><br><span class="line">  color: &#x27;0,0,0&#x27; # RGB values, use &#x27;,&#x27; to separate</span><br><span class="line">  opacity: 0.5 # the opacity of line: 0~1</span><br><span class="line">  zIndex: -1 # z-index property of the background</span><br><span class="line">  count: 150 # the number of lines</span><br></pre></td></tr></table></figure>
+
+<h3 id="增加文章结束标志"><a href="#增加文章结束标志" class="headerlink" title="增加文章结束标志"></a>增加文章结束标志</h3><p>1、在路径/themes/next/layout/_macro文件夹中新建passage-end-tag.swig文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 切换到路径_macro</span><br><span class="line">cd [_macro路径]</span><br><span class="line"># 创建passage-end-tag.swig文件</span><br><span class="line">touch passage-end-tag.swig</span><br></pre></td></tr></table></figure>
+
+<p>2、打开passage-end-tag.swig文件，添加以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line">    &#123;% if not is_index %&#125;</span><br><span class="line">        &lt;div style=&quot;text-align:center;color: #ccc;font-size:14px;&quot;&gt;-------------本文结束&lt;i class=&quot;fa fa-paw&quot;&gt;&lt;/i&gt;感谢您的阅读-------------&lt;/div&gt;</span><br><span class="line">    &#123;% endif %&#125;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>3、打开/themes/next/layout/_macro/post.swig，在post-body之后，post-footer之前，添加以下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line">  &#123;% if not is_index %&#125;</span><br><span class="line">    &#123;% include &#x27;passage-end-tag.swig&#x27; %&#125;</span><br><span class="line">  &#123;% endif %&#125;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>4、然后打开主题配置文件<code>_config.yml</code>,在末尾添加：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 文章末尾添加“本文结束”标记</span><br><span class="line">passage_end_tag:</span><br><span class="line">  enabled: true</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加文章版权信息"><a href="#添加文章版权信息" class="headerlink" title="添加文章版权信息"></a>添加文章版权信息</h3><p>1、打开主题配置_config.yml，进行相关参数设置：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">creative_commons:</span><br><span class="line">  license: by-nc-sa</span><br><span class="line">  sidebar: true</span><br><span class="line">  post: true</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加搜索功能"><a href="#添加搜索功能" class="headerlink" title="添加搜索功能"></a>添加搜索功能</h3><p>1、安装hexo-generator-searchdb插件.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd 文件目录</span><br><span class="line">npm install hexo-generator-searchdb --save</span><br></pre></td></tr></table></figure>
+
+<p>2、打开<strong>站点</strong>配置文件(hexo的配置文件)<code>_config.yml</code>,添加配置:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 搜索</span><br><span class="line">search:</span><br><span class="line">  path: ./public/search.xml</span><br><span class="line">  field: post</span><br><span class="line">  format: html</span><br><span class="line">  limit: 10000</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>next</tag>
+        <tag>博客</tag>
+      </tags>
+  </entry>
 </search>
