@@ -1,0 +1,53 @@
+---
+title: nodejs版本管理工具nvm的使用
+date: 2023-02-16 09:48:59
+tags:
+- nodejs
+- nvm
+- 版本管理
+categories:
+- JavaScript
+- 工具使用
+---
+
+## nodejs版本管理工具nvm的使用
+
+#### 1、什么是nvm
+
+如今的web前端开发多数大多都离不开Node，而且node更新迭代很快；不同项目依赖的node版本不同，会导致需要安装对应的node版本才能正常运行;同时维护多个版本的node将会是一件非常麻烦的事情，此时此刻我们就需要一个可以安装多个node版本并随时可以切换的版本控制工具来简化我们的工作，常用的node版本管理工具有n、nvm、nvs，这里我主要介绍nvm。
+
+#### 2、安装下载
+
+[nvm安装包下载地址]: https://github.com/coreybutler/nvm-windows/releases
+
+### 3、常见的使用命令
+
+```bash
+# 显示nvm版本
+nvm v
+
+# 列出本地已安装所有版本
+nvm list      
+
+# 添加可选参数available列出所有克下载版本
+nvm list available    
+
+# 安装node.js的命令 version指定版本号
+nvm install 10.22.0   
+
+# 安装最新稳定版node.js
+nvm install stable    
+
+# 卸载node.js的命令 version指定版本号
+nvm uninstall 10.22.0 
+
+# 切换到指定的node.js版本，使用此版本nodejs
+nvm use 10.22.0   
+
+# 启用node.js版本管理
+nvm on           
+
+# 关闭node.js版本管理  
+nvm off                
+```
+
