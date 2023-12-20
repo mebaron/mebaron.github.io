@@ -4,7 +4,7 @@
 
 # Site
 title: baronの博客
-subtitle: '指点江山，激扬文字，粪土当年万户侯。'
+subtitle: '靡不有初，鲜克有终；不忘初心，方得始终。'
 description: '生活、工作、游戏、读书，偶有所得，以此为记。'
 keywords: baron
 author: baron
@@ -97,7 +97,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: next
+theme: butterfly
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
@@ -105,10 +105,3 @@ deploy:
   type: git
   repository: git@github.com:mebaron/mebaron.github.io.git
   branch: main
-
-
-search:
-  path: search.xml
-  field: post
-  format: html
-  limit: 1000
