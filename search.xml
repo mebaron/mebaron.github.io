@@ -1,0 +1,826 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Hello World</title>
+    <url>/2023/12/20/1.hello-world/</url>
+    <content><![CDATA[<h2 id="hello-world"><a href="#hello-world" class="headerlink" title="hello world"></a>hello world</h2>]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>开始</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>多重背包问题(go实现)</title>
+    <url>/2023/02/27/10.%E5%A4%9A%E9%87%8D%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98-go%E5%AE%9E%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="多重背包问题"><a href="#多重背包问题" class="headerlink" title="多重背包问题"></a>多重背包问题</h1><h2 id="1-问题"><a href="#1-问题" class="headerlink" title="1.问题"></a>1.问题</h2><p>有 N 种物品和一个容量是 V 的背包。</p>
+<p>第 i 种物品最多有 si 件，每件体积是 vi，价值是 wi。</p>
+<p>求解将哪些物品装入背包，可使物品体积总和不超过背包容量，且价值总和最大。<br>输出最大价值。</p>
+<p>输入格式</p>
+<p>​    第一行两个整数，N，V；N，V，用空格隔开，分别表示物品种数和背包容积。</p>
+<p>​    接下来有 N 行，每行三个整数 vi,wi,si；vi,wi,si，用空格隔开，分别表示第 i 种物品的体积、价值和数量。</p>
+<p>输出格式</p>
+<p>​    输出一个整数，表示最大价值。</p>
+<p>数据范围</p>
+<p>​    0&lt;N,V≤1000&lt;N,V≤100<br>​    0&lt;vi,wi,si≤100</p>
+<span id="more"></span>
+
+<h2 id="2-解题思路及代码实现"><a href="#2-解题思路及代码实现" class="headerlink" title="2.解题思路及代码实现"></a>2.解题思路及代码实现</h2>]]></content>
+      <categories>
+        <category>技术</category>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>背包问题</tag>
+        <tag>go</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>11.使用kubeadm搭建k8s集群</title>
+    <url>/2023/03/28/11.%E4%BD%BF%E7%94%A8kubeadm%E6%90%AD%E5%BB%BAk8s%E9%9B%86%E7%BE%A4/</url>
+    <content><![CDATA[<h1 id="使用kubeadm搭建k8s集群"><a href="#使用kubeadm搭建k8s集群" class="headerlink" title="使用kubeadm搭建k8s集群"></a>使用kubeadm搭建k8s集群</h1><h2 id="1-安装环境准备"><a href="#1-安装环境准备" class="headerlink" title="1.安装环境准备"></a>1.安装环境准备</h2><h3 id="1-1-云服务器准备"><a href="#1-1-云服务器准备" class="headerlink" title="1.1.云服务器准备"></a>1.1.云服务器准备</h3><table>
+<thead>
+<tr>
+<th align="center">IP地址</th>
+<th align="center">节点角色</th>
+<th align="center">CPU</th>
+<th align="center">Memory</th>
+<th align="center">Hostname</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">10.0.1.9</td>
+<td align="center">master and etcd</td>
+<td align="center">&gt;=2c</td>
+<td align="center">&gt;=2G</td>
+<td align="center">master</td>
+</tr>
+<tr>
+<td align="center">10.0.1.5</td>
+<td align="center">node</td>
+<td align="center">&gt;=2c</td>
+<td align="center">&gt;=2G</td>
+<td align="center">node1</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-软件版本"><a href="#1-2-软件版本" class="headerlink" title="1.2.软件版本"></a>1.2.软件版本</h3><table>
+<thead>
+<tr>
+<th align="center">系统类型</th>
+<th align="center">Kubernetes版本</th>
+<th align="center">docker版本</th>
+<th align="center">kubeadm版本</th>
+<th align="center">kubectl版本</th>
+<th align="center">kubelet版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">CentOS 7.6</td>
+<td align="center">v1.17.4</td>
+<td align="center">19.03.8-ce</td>
+<td align="center">v1.17.4</td>
+<td align="center">v1.17.4</td>
+<td align="center">v1.17.4</td>
+</tr>
+</tbody></table>
+<span id="more"></span>
+
+<h3 id="1-3-云服务器环境初始化操作"><a href="#1-3-云服务器环境初始化操作" class="headerlink" title="1.3.云服务器环境初始化操作"></a>1.3.云服务器环境初始化操作</h3><h4 id="1-3-1-设置主机名"><a href="#1-3-1-设置主机名" class="headerlink" title="1.3.1.设置主机名"></a>1.3.1.设置主机名</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#master是设置名称 2台设备分别是 master node1</span></span><br><span class="line">hostnamectl set-hostname master </span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-2-修改host文件"><a href="#1-3-2-修改host文件" class="headerlink" title="1.3.2.修改host文件"></a>1.3.2.修改host文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/hosts</span><br><span class="line"></span><br><span class="line"><span class="comment">#添加</span></span><br><span class="line">10.0.1.9 master</span><br><span class="line">10.0.1.5 node1</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-3-关闭selinux"><a href="#1-3-3-关闭selinux" class="headerlink" title="1.3.3.关闭selinux"></a>1.3.3.关闭selinux</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#实时动态关闭</span></span><br><span class="line">setenforce 0 </span><br><span class="line"></span><br><span class="line"><span class="comment">#禁止重启后自动开启</span></span><br><span class="line">sed -i <span class="string">&#x27;s/SELINUX=enforcing/SELINUX=disabled/&#x27;</span> /etc/selinux/config </span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-4-关闭交换分区"><a href="#1-3-4-关闭交换分区" class="headerlink" title="1.3.4.关闭交换分区"></a>1.3.4.关闭交换分区</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#实时动态关闭</span></span><br><span class="line">swapoff -a </span><br><span class="line"></span><br><span class="line"><span class="comment">#禁止重启后自动开启</span></span><br><span class="line">sed -i <span class="string">&#x27;/ swap / s/^/#/&#x27;</span> /etc/fstab </span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-5-网络配置文件"><a href="#1-3-5-网络配置文件" class="headerlink" title="1.3.5.网络配置文件"></a>1.3.5.网络配置文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> &gt; /etc/sysctl.d/k8s.conf</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables = 1</span><br><span class="line">net.bridge.bridge-nf-call-iptables = 1</span><br><span class="line">net.ipv4.ip_forward = 1</span><br><span class="line">vm.swappiness=0</span><br><span class="line"></span><br><span class="line"><span class="comment">#退出 按 Ctrl + D</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#执行该命令 如果不执行就会在应用k8s.conf时出现加载错误</span></span><br><span class="line">modprobe br_netfilter  </span><br><span class="line"></span><br><span class="line"><span class="comment">#应用配置文件</span></span><br><span class="line">sysctl -p /etc/sysctl.d/k8s.conf</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-6-配置资源地址"><a href="#1-3-6-配置资源地址" class="headerlink" title="1.3.6.配置资源地址"></a>1.3.6.配置资源地址</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install wget -y  <span class="comment">#安装wget命令行</span></span><br><span class="line"></span><br><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo  <span class="comment">#配置yum源</span></span><br><span class="line"></span><br><span class="line">yum makecache <span class="comment">#更新缓存</span></span><br><span class="line"></span><br><span class="line">yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo <span class="comment">#配置docker下载的地址</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-7-安装Docker"><a href="#1-3-7-安装Docker" class="headerlink" title="1.3.7.安装Docker"></a>1.3.7.安装Docker</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum list docker-ce --showduplicates|<span class="built_in">sort</span> -r  <span class="comment">#展示版本列表</span></span><br><span class="line"></span><br><span class="line">yum install -y docker-ce  <span class="comment">#默认安装最新版，也可以指定版本下载</span></span><br><span class="line"></span><br><span class="line">systemctl start docker <span class="comment">#启动docker</span></span><br><span class="line">systemctl <span class="built_in">enable</span> docker <span class="comment">#将docker加入到开机启动</span></span><br><span class="line"></span><br><span class="line">docker version <span class="comment">#查看docker启动情况 和版本信息</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果安装的docker版本使用的cgroups，按以下方式修改为systemd</span></span><br><span class="line">vim /etc/docker/daemon.json</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;exec-opts&quot;</span>: [<span class="string">&quot;native.cgroupdriver=systemd&quot;</span>],</span><br><span class="line">  <span class="string">&quot;registry-mirrors&quot;</span>: [<span class="string">&quot;https://mj9kvemk.mirror.aliyuncs.com&quot;</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-8-配置k8s资源的下载地址"><a href="#1-3-8-配置k8s资源的下载地址" class="headerlink" title="1.3.8.配置k8s资源的下载地址"></a>1.3.8.配置k8s资源的下载地址</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> &lt;&lt;<span class="string">EOF &gt; /etc/yum.repos.d/kubernetes.repo</span></span><br><span class="line"><span class="string">[kubernetes]</span></span><br><span class="line"><span class="string">name=Kubernetes</span></span><br><span class="line"><span class="string">baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64</span></span><br><span class="line"><span class="string">enabled=1</span></span><br><span class="line"><span class="string">gpgcheck=0</span></span><br><span class="line"><span class="string">repo_gpgcheck=0</span></span><br><span class="line"><span class="string">gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg</span></span><br><span class="line"><span class="string">        http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-9-安装-kubelet-kubeadm-kubectl"><a href="#1-3-9-安装-kubelet-kubeadm-kubectl" class="headerlink" title="1.3.9.安装 kubelet kubeadm kubectl"></a>1.3.9.安装 kubelet kubeadm kubectl</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 默认安装最新版本，也可以指定版本</span></span><br><span class="line">yum install -y kubelet kubeadm kubectl</span><br><span class="line"></span><br><span class="line"><span class="comment">#设置kubelet开机启动</span></span><br><span class="line">systemctl <span class="built_in">enable</span> kubelet.service </span><br></pre></td></tr></table></figure>
+
+<h2 id="2-开始初始化-（只在主节点Master上面操作）"><a href="#2-开始初始化-（只在主节点Master上面操作）" class="headerlink" title="2.开始初始化 （只在主节点Master上面操作）"></a>2.开始初始化 （只在主节点Master上面操作）</h2><h3 id="2-1-创建初始化配置文件"><a href="#2-1-创建初始化配置文件" class="headerlink" title="2.1.创建初始化配置文件"></a>2.1.创建初始化配置文件</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">kubeadm config print init-defaults &gt; kubeadm-config.yaml</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-根据各自部署环境修改配置文件"><a href="#2-2-根据各自部署环境修改配置文件" class="headerlink" title="2.2.根据各自部署环境修改配置文件"></a>2.2.根据各自部署环境修改配置文件</h3><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">kubeadm.k8s.io/v1beta2</span></span><br><span class="line"><span class="attr">bootstrapTokens:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">groups:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">system:bootstrappers:kubeadm:default-node-token</span></span><br><span class="line">  <span class="attr">token:</span> <span class="string">abcdef.0123456789abcdef</span></span><br><span class="line">  <span class="attr">ttl:</span> <span class="string">24h0m0s</span></span><br><span class="line">  <span class="attr">usages:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">signing</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">authentication</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">InitConfiguration</span></span><br><span class="line"><span class="attr">localAPIEndpoint:</span></span><br><span class="line">  <span class="attr">advertiseAddress:</span> <span class="number">10.0</span><span class="number">.1</span><span class="number">.9</span></span><br><span class="line">  <span class="attr">bindPort:</span> <span class="number">6443</span></span><br><span class="line"><span class="attr">nodeRegistration:</span></span><br><span class="line">  <span class="attr">criSocket:</span> <span class="string">/var/run/dockershim.sock</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">k8s1</span></span><br><span class="line">  <span class="attr">taints:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">effect:</span> <span class="string">NoSchedule</span></span><br><span class="line">    <span class="attr">key:</span> <span class="string">node-role.kubernetes.io/master</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiServer:</span></span><br><span class="line">  <span class="attr">timeoutForControlPlane:</span> <span class="string">4m0s</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">kubeadm.k8s.io/v1beta2</span></span><br><span class="line"><span class="attr">certificatesDir:</span> <span class="string">/etc/kubernetes/pki</span></span><br><span class="line"><span class="attr">clusterName:</span> <span class="string">kubernetes</span></span><br><span class="line"><span class="attr">controllerManager:</span> &#123;&#125;</span><br><span class="line"><span class="attr">dns:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">CoreDNS</span></span><br><span class="line"><span class="attr">etcd:</span></span><br><span class="line">  <span class="attr">local:</span></span><br><span class="line">    <span class="attr">dataDir:</span> <span class="string">/var/lib/etcd</span></span><br><span class="line"><span class="attr">imageRepository:</span> <span class="string">gcr.azk8s.cn/google-containers</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ClusterConfiguration</span></span><br><span class="line"><span class="attr">kubernetesVersion:</span> <span class="string">v1.17.3</span></span><br><span class="line"><span class="attr">networking:</span></span><br><span class="line">  <span class="attr">dnsDomain:</span> <span class="string">cluster.local</span></span><br><span class="line">  <span class="attr">podSubnet:</span> <span class="string">&quot;192.168.0.0/16&quot;</span></span><br><span class="line">  <span class="attr">serviceSubnet:</span> <span class="number">10.96</span><span class="number">.0</span><span class="number">.0</span><span class="string">/12</span></span><br><span class="line"><span class="attr">scheduler:</span> &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置说明：<br><strong>imageRepository</strong>：指定为业务所需的镜像仓库地址<br><strong>podSubnet</strong>：指定的IP地址段与后续部署的网络插件相匹配。（部署flannel插件，配置为10.244.0.0/16；部署calico插件，配置为192.168.0.0/16）</p>
+<h3 id="2-3-开始初始化"><a href="#2-3-开始初始化" class="headerlink" title="2.3.开始初始化"></a>2.3.开始初始化</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#只在Master1的主机上面执行 版本信息与你要安装的相同</span></span><br><span class="line">kubeadm init --config=kubeadm-config.yaml</span><br><span class="line"></span><br><span class="line"><span class="comment">#当出现 类似 如下说明master安装成功</span></span><br><span class="line">kubeadm <span class="built_in">join</span> 10.0.1.9:6443 --token abcdef.0123456789abcdef \</span><br><span class="line">    --discovery-token-ca-cert-hash sha256:b617794af7644843a3dd1104d717686fb31b9c295c7636c2b664b253e0fa6128</span><br><span class="line"></span><br><span class="line"><span class="comment">#然后执行安装成功提示的命令行，这部分执行你安装成功后的部分，可能每个人的有所不同</span></span><br><span class="line">  <span class="built_in">mkdir</span> -p <span class="variable">$HOME</span>/.kube</span><br><span class="line">  sudo <span class="built_in">cp</span> -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</span><br><span class="line">  sudo <span class="built_in">chown</span> $(<span class="built_in">id</span> -u):$(<span class="built_in">id</span> -g) <span class="variable">$HOME</span>/.kube/config</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-节点node加入（默认此事上面一步骤-都进行了操作）"><a href="#3-节点node加入（默认此事上面一步骤-都进行了操作）" class="headerlink" title="3.节点node加入（默认此事上面一步骤 都进行了操作）"></a>3.节点node加入（默认此事上面一步骤 都进行了操作）</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 执行master安装成功后的 kubeadm join命令，注意是你自己的，下面是举例</span></span><br><span class="line">kubeadm <span class="built_in">join</span> 10.0.1.9:6443 --token abcdef.0123456789abcdef --discovery-token-ca-cert-hash sha256:b617794af7644843a3dd1104d717686fb31b9c295c7636c2b664b253e0fa6128</span><br><span class="line"></span><br><span class="line"><span class="comment">#当出现 类似 如下说明node加入集群成功</span></span><br><span class="line">This node has joined the cluster:</span><br><span class="line">* Certificate signing request was sent to apiserver and a response was received.</span><br><span class="line">* The Kubelet was informed of the new secure connection details.</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-master节点验证安装进度"><a href="#4-master节点验证安装进度" class="headerlink" title="4.master节点验证安装进度"></a>4.master节点验证安装进度</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#命令一 </span></span><br><span class="line">kubectl get cs <span class="comment">#显示内容如下说明Master安装没问题</span></span><br><span class="line">NAME                 STATUS    MESSAGE              ERROR</span><br><span class="line">scheduler            Healthy   ok                   </span><br><span class="line">controller-manager   Healthy   ok                   </span><br><span class="line">etcd-0               Healthy   &#123;<span class="string">&quot;health&quot;</span>: <span class="string">&quot;true&quot;</span>&#125; </span><br><span class="line"></span><br><span class="line"><span class="comment">#命令二</span></span><br><span class="line">kubectl get pod -n kube-system <span class="comment">#查看pod状态，下面只是部分pod内容</span></span><br><span class="line">NAME                                   READY   STATUS             RESTARTS   AGE</span><br><span class="line">coredns-86c58d9df4-j9g8d               1/1     Running            0          128m</span><br><span class="line">coredns-86c58d9df4-pg45w               1/1     Running            0          128m</span><br><span class="line">etcd-k8s1                              1/1     Running            0          127m</span><br><span class="line">kube-apiserver-k8s1                    1/1     Running            0          127m</span><br><span class="line">kube-controller-manager-k8s1           1/1     Running            0          127m</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#在这里你可能发现你的coredns的状态并不是Running，不要着急，这里需要给集群配置网络插件，配置好就自动Running了</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#命令三</span></span><br><span class="line">kubectl get node <span class="comment">#查看节点状态 </span></span><br><span class="line">NAME   STATUS   ROLES    AGE    VERSION</span><br><span class="line">master   NoReady    master   131m   v1.17.4</span><br><span class="line">node1   NoReady    &lt;none&gt;   93m    v1.17.4</span><br><span class="line"></span><br><span class="line"><span class="comment">#如果你添加了节点里面看的话,可能还未初始化，显示的是NoReady是因为集群网络插件还未配置。</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="5-安装集群网络插件-只需要Master安装"><a href="#5-安装集群网络插件-只需要Master安装" class="headerlink" title="5.安装集群网络插件 (只需要Master安装)"></a>5.安装集群网络插件 (只需要Master安装)</h2><p>下面两种网络插件任选一种即可。</p>
+<h3 id="5-1-安装Flannel-网络插件"><a href="#5-1-安装Flannel-网络插件" class="headerlink" title="5.1.安装Flannel 网络插件"></a>5.1.安装Flannel 网络插件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 获取flannel网络插件配置yaml文件</span></span><br><span class="line">wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果云服务器为多网卡机器，在启动命令中添加：</span></span><br><span class="line">		...</span><br><span class="line">        <span class="built_in">command</span>:</span><br><span class="line">        - /opt/bin/flanneld</span><br><span class="line">        args:</span><br><span class="line">        - --ip-masq</span><br><span class="line">        - --kube-subnet-mgr</span><br><span class="line">        - --iface=eth0  <span class="comment"># 指定使用的相应网卡</span></span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line">kubectl apply -f kube-flannel.yml</span><br><span class="line"></span><br><span class="line"><span class="comment">#安装成功后查看pod</span></span><br><span class="line">kubectl get pod -n kube-system</span><br><span class="line">NAME                                   READY   STATUS             RESTARTS   AGE</span><br><span class="line">coredns-86c58d9df4-j9g8d               1/1     Running            0          128m</span><br><span class="line">coredns-86c58d9df4-pg45w               1/1     Running            0          128m</span><br><span class="line">etcd-k8s1                              1/1     Running            0          127m</span><br><span class="line">kube-apiserver-k8s1                    1/1     Running            0          127m</span><br><span class="line">kube-controller-manager-k8s1           1/1     Running            0          127m</span><br><span class="line">kube-flannel-ds-amd64-7btlw            1/1     Running            0          91m</span><br><span class="line">kube-flannel-ds-amd64-9vq42            1/1     Running            0          106m</span><br><span class="line">kube-flannel-ds-amd64-kdf42            1/1     Running            0          90m</span><br><span class="line">kube-proxy-dtmfs                       1/1     Running            0          128m</span><br><span class="line">kube-proxy-p76tc                       1/1     Running            0          90m</span><br><span class="line">kube-proxy-xgw28                       1/1     Running            0          91m</span><br><span class="line">kube-scheduler-k8s1                    1/1     Running            0          128m</span><br><span class="line"></span><br><span class="line"><span class="comment">#全部Running则表示 成功了</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-安装calico"><a href="#5-2-安装calico" class="headerlink" title="5.2.安装calico"></a>5.2.安装calico</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 获取calico网络插件配置yaml文件</span></span><br><span class="line">wget https://docs.projectcalico.org/manifests/calico.yaml</span><br><span class="line"></span><br><span class="line">kubectl apply -f calico.yaml</span><br><span class="line"></span><br><span class="line"><span class="comment">#安装成功后查看pod</span></span><br><span class="line">kubectl get pod -n kube-system</span><br><span class="line"></span><br><span class="line"><span class="comment">#全部Running则表示 成功了</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>k8s</tag>
+        <tag>kubeadm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>12.centos系统安装containerd</title>
+    <url>/2023/03/28/12.centos%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85containerd/</url>
+    <content><![CDATA[<h1 id="centos系统安装containerd"><a href="#centos系统安装containerd" class="headerlink" title="centos系统安装containerd"></a>centos系统安装containerd</h1><h2 id="1-背景"><a href="#1-背景" class="headerlink" title="1.背景"></a>1.背景</h2><p>Kubernetes 的早期版本仅适用于特定的容器运行时：Docker Engine。 后来，Kubernetes 增加了对使用其他容器运行时的支持。创建<a href="https://kubernetes.io/blog/2016/12/container-runtime-interface-cri-in-kubernetes/">CRI 标准</a> 是为了实现编排器（如 Kubernetes）和许多不同的容器运行时之间交互操作。 Docker Engine 没有实现（CRI）接口，因此 Kubernetes 项目创建了特殊代码来帮助过渡， 并使 dockershim 代码成为 Kubernetes 的一部分。</p>
+<p>dockershim 代码一直是一个临时解决方案（因此得名：shim）。 你可以阅读 <a href="https://github.com/kubernetes/enhancements/tree/master/keps/sig-node/2221-remove-dockershim">Kubernetes 移除 Dockershim 增强方案</a> 以了解相关的社区讨论和计划。 事实上，维护 dockershim 已经成为 Kubernetes 维护者的沉重负担。</p>
+<p>此外，在较新的 CRI 运行时中实现了与 dockershim 不兼容的功能，例如 cgroups v2 和用户命名空间。 从 Kubernetes 中移除 dockershim 允许在这些领域进行进一步的开发。</p>
+<p>Kubernetes 在 <a href="https://kubernetes.io/releases/#release-v1-24">v1.24 版</a>正式移除了 dockershim。</p>
+<span id="more"></span>
+
+<h2 id="2-containerd运行时"><a href="#2-containerd运行时" class="headerlink" title="2.containerd运行时"></a>2.containerd运行时</h2><p><a href="https://github.com/containerd/containerd">containerd</a>作为CNCF社区毕业的运行时项目，在k8s移除dockershim的背景下，有必要了解containerd的安装和基本使用。</p>
+<h3 id="2-1-containerd安装"><a href="#2-1-containerd安装" class="headerlink" title="2.1.containerd安装"></a>2.1.containerd安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1.安装依赖</span></span><br><span class="line"> </span><br><span class="line">yum install -y yum-utils device-mapper-persistent-data lvm2</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 2.添加yum源</span></span><br><span class="line"> </span><br><span class="line">yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 3.安装containerd</span></span><br><span class="line"> </span><br><span class="line">yum install containerd -y</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 4.生成配置文件</span></span><br><span class="line"> </span><br><span class="line">containerd config default &gt; /etc/containerd/config.toml</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 5.替换 containerd 默认的 sand_box 镜像，编辑 /etc/containerd/config.toml</span></span><br><span class="line"> </span><br><span class="line">sandbox_image = <span class="string">&quot;registry.aliyuncs.com/google_containers/pause:3.2&quot;</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 6.启动服务</span></span><br><span class="line"> </span><br><span class="line">systemctl restart containerd &amp;&amp; systemctl <span class="built_in">enable</span> containerd</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>k8s</tag>
+        <tag>containerd</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>k8s apiserver证书添加新地址</title>
+    <url>/2023/03/28/13.k8s-apiserver%E8%AF%81%E4%B9%A6%E6%B7%BB%E5%8A%A0%E6%96%B0%E5%9C%B0%E5%9D%80/</url>
+    <content><![CDATA[<h1 id="k8s-apiserver证书添加新地址"><a href="#k8s-apiserver证书添加新地址" class="headerlink" title="k8s apiserver证书添加新地址"></a>k8s apiserver证书添加新地址</h1><h2 id="1-环境基础"><a href="#1-环境基础" class="headerlink" title="1.环境基础"></a>1.环境基础</h2><table>
+<thead>
+<tr>
+<th align="center">集群版本</th>
+<th align="center">安装环境</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">v1.26.3</td>
+<td align="center">kubeadm安装的集群</td>
+</tr>
+</tbody></table>
+<span id="more"></span>
+
+<h2 id="2-查看当前证书中的可信地址"><a href="#2-查看当前证书中的可信地址" class="headerlink" title="2.查看当前证书中的可信地址"></a>2.查看当前证书中的可信地址</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># k8s证书目录： /etc/kubernetes/pki</span></span><br><span class="line"></span><br><span class="line">openssl x509 -<span class="keyword">in</span> apiserver.crt -noout -text</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-给证书添加新地址"><a href="#3-给证书添加新地址" class="headerlink" title="3.给证书添加新地址"></a>3.给证书添加新地址</h2><h3 id="3-1-修改kubeadm-config-yaml-在certSANs中添加要加入的地址"><a href="#3-1-修改kubeadm-config-yaml-在certSANs中添加要加入的地址" class="headerlink" title="3.1.修改kubeadm-config.yaml ,在certSANs中添加要加入的地址"></a>3.1.修改kubeadm-config.yaml ,在certSANs中添加要加入的地址</h3><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiServer:</span></span><br><span class="line">  <span class="attr">certSANs:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">xx.xx.xx.xx</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-删除k8s证书目录中的apiserver-crt-、apiserver-key"><a href="#3-2-删除k8s证书目录中的apiserver-crt-、apiserver-key" class="headerlink" title="3.2.删除k8s证书目录中的apiserver.crt 、apiserver.key"></a>3.2.删除k8s证书目录中的apiserver.crt 、apiserver.key</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># k8s证书目录： /etc/kubernetes/pki</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">rm</span> -f apiserver.*</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-根据kubeadm配置文件生成新的证书"><a href="#3-3-根据kubeadm配置文件生成新的证书" class="headerlink" title="3.3.根据kubeadm配置文件生成新的证书"></a>3.3.根据kubeadm配置文件生成新的证书</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubeadm init phase certs apiserver --config ./kubeadm-config.yaml</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-查看新生成证书中的可信地址"><a href="#3-4-查看新生成证书中的可信地址" class="headerlink" title="3.4.查看新生成证书中的可信地址"></a>3.4.查看新生成证书中的可信地址</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># k8s证书目录： /etc/kubernetes/pki</span></span><br><span class="line"></span><br><span class="line">openssl x509 -<span class="keyword">in</span> apiserver.crt -noout -text</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>k8s</tag>
+        <tag>ca</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>TCP的三次握手和四次挥手</title>
+    <url>/2023/12/22/14.TCP%E7%9A%84%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%92%8C%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/</url>
+    <content><![CDATA[<h2 id="TCP的三次握手和四次挥手"><a href="#TCP的三次握手和四次挥手" class="headerlink" title="TCP的三次握手和四次挥手"></a>TCP的三次握手和四次挥手</h2><h3 id="1-常见的网络概念"><a href="#1-常见的网络概念" class="headerlink" title="1.常见的网络概念"></a>1.常见的网络概念</h3><p>MTU：maximum transmission unit，数据链路协议所使用的最大传输单元。</p>
+<h3 id="2-TCP的三次握手"><a href="#2-TCP的三次握手" class="headerlink" title="2.TCP的三次握手"></a>2.TCP的三次握手</h3><p>所有基于TCP的通信都需要以两台主机的握手开始，这个握手过程主要希望能达到以下不同的目的：</p>
+<ul>
+<li>保证源主机确定目的主机在线，并且可以进行通信。</li>
+<li>让源主机检查它是否正在监听试图去连接的端口。</li>
+<li>允许源主机向接收者发送它的起始序列号，使得两台主机可以将数据包流保持有序。</li>
+</ul>
+<p>TCP握手分为三个步骤：</p>
+<p>第一步，主动发起通信的设备（假设它为主机A）向目标（假设它为主机B）发送了一个TCP数据包。这个数据包的TCP头设置了SYN标志，并包含了在通信过程中会用到的初始序列号和最大分段大小。</p>
+<p>第二步，主机B对于这个数据包回复一个类似于设置了SYN和ACK标志以及包含了它初始序列号的数据包。</p>
+<p>第三步，主机A向主机B发送最后一个仅设置了ACK标志的数据包。</p>
+<p>这个过程完成后，双方设备就具备了正常通信所需的信息。</p>
+<h3 id="3-TCP的四次挥手"><a href="#3-TCP的四次挥手" class="headerlink" title="3.TCP的四次挥手"></a>3.TCP的四次挥手</h3><p>在TCP中，每次握手后也会有终止。TCP终止用来在两台设备完成通信后正常地结束连接。这个过程包含4个数据包，并且用一个FIN标志来表明连接的终结。</p>
+<p>TCP挥手分为四步：</p>
+<p>第一步，主机A通过发送一个设置了FIN和ACK标志的TCP的数据包，告诉主机B通信完成。</p>
+<p>第二步，主机B以一个ACK数据包响应。</p>
+<p>第三步，主机B传输自己的FIN/ACK数据包给主机A。</p>
+<p>第四步，主机A响应一个ACK数据包。</p>
+<p>这个过程完成后，双方就结束了本次通信。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>网络</tag>
+        <tag>TCP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>动态主机配置协议DHCP</title>
+    <url>/2023/12/25/15.%E5%8A%A8%E6%80%81%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE%E5%8D%8F%E8%AE%AEDHCP/</url>
+    <content><![CDATA[<h2 id="动态主机配置协议DHCP"><a href="#动态主机配置协议DHCP" class="headerlink" title="动态主机配置协议DHCP"></a>动态主机配置协议DHCP</h2><h3 id="1-什么是DHCP"><a href="#1-什么是DHCP" class="headerlink" title="1.什么是DHCP"></a>1.什么是DHCP</h3><p>DHCP是一个应用层协议，能够让设备自动获取IP地址（以及其他重要网络资源，比如DNS服务器和路由网关的地址）。</p>
+<h3 id="2-DHCP头结构"><a href="#2-DHCP头结构" class="headerlink" title="2.DHCP头结构"></a>2.DHCP头结构</h3><table>
+<thead>
+<tr>
+<th align="center">偏移位</th>
+<th align="center">0-15</th>
+<th align="center">16-31</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0</td>
+<td align="center">操作代码|硬件类型</td>
+<td align="center">硬件长度|跳数</td>
+</tr>
+<tr>
+<td align="center">32</td>
+<td align="center">事务id</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">64</td>
+<td align="center">消耗时间</td>
+<td align="center">标记</td>
+</tr>
+<tr>
+<td align="center">96</td>
+<td align="center">客户端IP地址</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">128</td>
+<td align="center">你的IP地址</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">160</td>
+<td align="center">服务器IP地址</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">196</td>
+<td align="center">网关IP地址</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">228+</td>
+<td align="center">客户端硬件地址（16字节）</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">服务器主机地址（64字节）</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">启动文件（128字节）</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">选项</td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<ul>
+<li>操作代码（OpCode)：用来指出这个数据包是DHCP请求还是DHCP回复。</li>
+<li>硬件类型（Hardware Type）：硬件地址类型（10MB以太网、IEEE802等）。</li>
+<li>硬件长度（Hardware Length）：硬件地址长度。</li>
+<li>跳数（Hops）：中继代理用来帮助寻找DHCP服务器。</li>
+<li>事务ID（Transaction ID）：用来匹配请求和响应的一个随机数。</li>
+<li>标记（Flags）：DHCP客户端能够接受的流量类型（单播、广播以及其他）。</li>
+<li>客户端IP地址（Client IP Address）：客户端的IP地址。</li>
+<li>你的IP地址（Your IP　Address）：DHCP服务器提供的IP地址。</li>
+<li>服务器IP地址（Server　IP　Address）：DHCP服务器的IP地址。</li>
+<li>网关IP地址（Gateway　IP　Address）：网络默认网关的IP地址。</li>
+<li>客户端硬件地址（Client　Hardware　Address）：客户端的MAC地址。</li>
+<li>服务器主机名（Server　Host　Name）：服务器的主机名（可选）。</li>
+<li>启动文件（Boot　File）：DHCP所使用的启动文件（可选）。</li>
+<li>选项（Options）：用来对DHCP数据包进行扩展，以提供更多功能。</li>
+</ul>
+<h3 id="3-DHCP续租过程"><a href="#3-DHCP续租过程" class="headerlink" title="3.DHCP续租过程"></a>3.DHCP续租过程</h3><p>续租过程在一个客户端和DHCP服务器之间进行，总共分四步：</p>
+<p>第一步：客户端向DHCP服务器发送发现（Discover）数据包。</p>
+<p>第二步：DHCP服务器向客户端发送提供（Offer）数据包。</p>
+<p>第三步：客户端向DHCP服务器发送请求（Request）数据包。</p>
+<p>第四步：DHCP服务器向客户端发送确认（Acknowledgement）数据包。</p>
+<p>注意，租内续约只需要请求和确认两个步骤。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>DHCP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>域名系统DNS</title>
+    <url>/2023/12/25/16.%E5%9F%9F%E5%90%8D%E7%B3%BB%E7%BB%9FDNS/</url>
+    <content><![CDATA[<h2 id="域名系统DNS"><a href="#域名系统DNS" class="headerlink" title="域名系统DNS"></a>域名系统DNS</h2><p>DNS服务器存储了一个有着IP地址和DNS名字映射资源记录的数据库，并将其和客户端与其他DNS服务器共享。</p>
+<h3 id="1-DNS数据包结构"><a href="#1-DNS数据包结构" class="headerlink" title="1.DNS数据包结构"></a>1.DNS数据包结构</h3><table>
+<thead>
+<tr>
+<th align="center">偏移位</th>
+<th align="center">0-15</th>
+<th align="center">16-31</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0</td>
+<td align="center">DNS ID号</td>
+<td align="center">QR | 操作代码| AA | TC | RD | RA | Z | 响应代码</td>
+</tr>
+<tr>
+<td align="center">32</td>
+<td align="center">问题计数</td>
+<td align="center">回答区段</td>
+</tr>
+<tr>
+<td align="center">64</td>
+<td align="center">域名服务器计数</td>
+<td align="center">额外记录计数</td>
+</tr>
+<tr>
+<td align="center">96</td>
+<td align="center">问题区段</td>
+<td align="center">回答区段</td>
+</tr>
+<tr>
+<td align="center">128</td>
+<td align="center">权威区段</td>
+<td align="center">额外信息区段</td>
+</tr>
+</tbody></table>
+<ul>
+<li>DNS ID号（DNS　ID　Number）：用来应对DNS查询和DNS响应。</li>
+<li>查询／响应（Query／Response）：用来指明这个数据包是DNS查询还是响应。</li>
+<li>操作代码（OpCode）：用来定义消息中的请求类型。</li>
+<li>权威应答（Authoritative Answer）：如果响应数据包中设定了这个则说明这个响应是由域内权威域名服务器发出的。</li>
+<li>截断（Truncation）：用来指明这个响应由于太长，无法装入数据包而被截断。</li>
+<li>期望递归（Recursion　Desired）：当请求中设定了这个值，则说明DNS客户端在目标域名服务器不含有所请求信息的情况下，要求进行递归查询。</li>
+<li>可用递归（Recursion　Available）：当响应中设定了这个值，说明域名服务器支持递归查询。</li>
+<li>响应代码（Response　Code）：在DNS响应中用来指明错误。</li>
+<li>问题计数（Question　Count）：在问题区段中的条目数。</li>
+<li>回答计数（Answer　Count）：在回答区段中的条目数。</li>
+<li>域名服务器计数（Name　Server　Count）：在权威区段的域名资源记录数。</li>
+<li>额外记录计数（Additional　Records　Count）：在额外信息区段中其他资源记录数。</li>
+<li>问题区段（Question　section）：大小可变，包含有被发送到DNS服务器的一条或多条的信息查询的部分。</li>
+<li>回答区段（Answer　Section）：大小可变，含有用来回答查询的一条或多条资源记录。</li>
+<li>权威区段（Authority　Section）：大小可变，包含指向权威域名服务器的资源记录，用以继续解析过程。</li>
+<li>额外信息区段（Additional　Information　Section）：包含资源记录且大小可变的区段，这些资源记录用来存储完全没有必要回答的查询相关的额外信息。</li>
+</ul>
+<h3 id="2-常用的DNS资源记录类型"><a href="#2-常用的DNS资源记录类型" class="headerlink" title="2.常用的DNS资源记录类型"></a>2.常用的DNS资源记录类型</h3><table>
+<thead>
+<tr>
+<th>值</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>１</td>
+<td>A</td>
+<td>IPv4主机地址</td>
+</tr>
+<tr>
+<td>2</td>
+<td>NS</td>
+<td>权威域名服务器</td>
+</tr>
+<tr>
+<td>5</td>
+<td>CNAME</td>
+<td>规范别名</td>
+</tr>
+<tr>
+<td>15</td>
+<td>MX</td>
+<td>邮件交换</td>
+</tr>
+<tr>
+<td>16</td>
+<td>TXT</td>
+<td>文本字符串</td>
+</tr>
+<tr>
+<td>28</td>
+<td>AAAA</td>
+<td>IPv6主机地址</td>
+</tr>
+<tr>
+<td>251</td>
+<td>IXFR</td>
+<td>增量区域传送</td>
+</tr>
+<tr>
+<td>252</td>
+<td>AXFR</td>
+<td>完整区域传送</td>
+</tr>
+</tbody></table>
+<ul>
+<li>完整区域传送（AXFR）：这个类型的传送将整个区域在设备间进行传送。</li>
+<li>增量区域传送（LXFR）：这个类型的传送仅传送区域信息的一部分。</li>
+</ul>
+<p>上面是指DNS主备服务器之间信息同步的不同方案。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>DNS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>超文本传输协议HTTP</title>
+    <url>/2023/12/25/17.%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AEHTTP/</url>
+    <content><![CDATA[<h2 id="超文本传输协议HTTP"><a href="#超文本传输协议HTTP" class="headerlink" title="超文本传输协议HTTP"></a>超文本传输协议HTTP</h2>]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>HTTP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用hexo搭建个人博客</title>
+    <url>/2021/12/11/2.%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<h1 id="使用hexo搭建个人博客"><a href="#使用hexo搭建个人博客" class="headerlink" title="使用hexo搭建个人博客"></a>使用hexo搭建个人博客</h1><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p> 目前使用hexo配合github来搭建个人博客十分常见，最近摸索了下相关技术，使用hexo➕GitHub搭建了个人博客，并且使用到了next主题，在此做个总结。</p>
+<h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><p>1、安装Node.js环境。（Hexo基于Node.js，因此搭建过程需要使用到相关环境）</p>
+<p>2、安装Git。（用于与GitHub链接及日常推送）</p>
+<p>3、将本地环境的ssh公钥配置到GitHub。</p>
+<p>4、初始化本地git配置。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git config --global user.name &quot;GitHub 用户名&quot;</span><br><span class="line">git config --global user.email &quot;GitHub 邮箱&quot;</span><br></pre></td></tr></table></figure>
+
+<p>5、创建GitHub的仓库。（仓库名使用：用户名.github.io）</p>
+<h3 id="安装本地Hexo"><a href="#安装本地Hexo" class="headerlink" title="安装本地Hexo"></a>安装本地Hexo</h3><p>1、npm一键安装hexo.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Mac环境。</span><br><span class="line">sudo npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<p>2、hexo初始化</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># cd到准备的博客目录（如blog）</span><br><span class="line">cd /blog</span><br><span class="line"></span><br><span class="line"># 初始化</span><br><span class="line">hexo init</span><br><span class="line"></span><br><span class="line"># 安装组件</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
+<p>3、测试安装结果。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 生成页面</span><br><span class="line">hexo g</span><br><span class="line"></span><br><span class="line"># 启动预览</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+
+<p>此时若在浏览器访问<code>http://localhost:4000</code>，如果出现 Hexo 默认页面，则本地博客安装成功。</p>
+<h3 id="将Hexo推送到GitHub"><a href="#将Hexo推送到GitHub" class="headerlink" title="将Hexo推送到GitHub"></a>将Hexo推送到GitHub</h3><p>1、安装推送插件。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># workdir 博客目录（/blog下）</span><br><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<p>2、修改工作目录下的<code>_config.yml</code> 文件的deploy部分，修改成如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repository: git@github.com:用户名/用户名.github.io.git</span><br><span class="line">  branch: main</span><br></pre></td></tr></table></figure>
+
+<p>3、将Hexo推送到GitHub。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+<p>4、访问<code>https://用户名.github.io</code> 来确认下推送结果。</p>
+<h3 id="使用next主题"><a href="#使用next主题" class="headerlink" title="使用next主题"></a>使用next主题</h3><p>1、到博客目录下载next主题资源。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># cd到博客目录</span><br><span class="line">git clone https://github.com/next-theme/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
+
+<p>2、修改Hexo的 <code>_config.yml</code> 中的theme为新主题名称 next，如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">theme: next</span><br></pre></td></tr></table></figure>
+
+<p>3、推送到GitHub。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+<p>4、访问<code>https://用户名.github.io</code> 来确认下推送结果。</p>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p> 到此，一个简单的个人博客雏形就搭建完毕了。Next主体有许多美化配置，可以让我们的博客更好看。接下来就让我们来看看next的个性化配置。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>next</tag>
+        <tag>博客</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>next主题美化配置</title>
+    <url>/2021/12/11/3.next%E4%B8%BB%E9%A2%98%E7%BE%8E%E5%8C%96%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="next主题美化配置"><a href="#next主题美化配置" class="headerlink" title="next主题美化配置"></a>next主题美化配置</h1><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p> 网上关于Hexo的主题美化博客较多，本文用以记录搭建本博客网站过程中使用到的next主题美化配置。给大家做个参考，与大家一起学习进步。</p>
+<h3 id="常规配置"><a href="#常规配置" class="headerlink" title="常规配置"></a>常规配置</h3><p>1、打开<strong>站点</strong>配置文件(hexo的配置文件)<code>_config.yml</code>,修改配置。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Site</span><br><span class="line">title: baronの博客</span><br><span class="line">subtitle: &#x27;指点江山，激扬文字，粪土当年万户侯。&#x27;</span><br><span class="line">description: &#x27;生活、工作、游戏、读书，偶有所得，以此为记。&#x27;</span><br><span class="line">keywords: baron</span><br><span class="line">author: baron</span><br><span class="line">language: zh-CN</span><br><span class="line">timezone: Asia/Shanghai</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<p>2、将我们的头像放置在/themes/next/sources/images目录下，打开主题配置文件<code>_config.yml</code>，修改配置。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Sidebar Avatar</span><br><span class="line">avatar:</span><br><span class="line">  # Replace the default image and set the url here.</span><br><span class="line">  url: /images/baron.jpg</span><br><span class="line">  # If true, the avatar will be dispalyed in circle.</span><br><span class="line">  rounded: false</span><br><span class="line">  # If true, the avatar will be rotated with the cursor.</span><br><span class="line">  rotated: false</span><br></pre></td></tr></table></figure>
+
+<h3 id="自定义博客图标"><a href="#自定义博客图标" class="headerlink" title="自定义博客图标"></a>自定义博客图标</h3><p> next博客的默认图标是<code>H</code>，不过Next支持修改图标。</p>
+<p>我们需要将我们的图标放置在/themes/next/sources/images目录下，并在主题配置文件中进行如下配置，只需要设置small和medium两个就可以（不同尺寸的图标可以到网上制作）。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">favicon:</span><br><span class="line">  small: /images/baron_16px.ico</span><br><span class="line">  medium: /images/baron_32px.ico</span><br><span class="line">  apple_touch_icon: /images/apple-touch-icon-next.png</span><br><span class="line">  safari_pinned_tab: /images/logo.svg</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加点击效果"><a href="#添加点击效果" class="headerlink" title="添加点击效果"></a>添加点击效果</h3><p>1、在/themes/next/source/js目录下，新建clicklove.js文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd /themes/next/source/js</span><br><span class="line">touch clicklove.js</span><br></pre></td></tr></table></figure>
+
+<p>2、将下面的代码粘贴进clicklove.js文件中：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">!function(e,t,a)&#123;function n()&#123;c(&quot;.heart&#123;width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);&#125;.heart:after,.heart:before&#123;content: &#x27;&#x27;;width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;&#125;.heart:after&#123;top: -5px;&#125;.heart:before&#123;left: -5px;&#125;&quot;),o(),r()&#125;function r()&#123;for(var e=0;e&lt;d.length;e++)d[e].alpha&lt;=0?(t.body.removeChild(d[e].el),d.splice(e,1)):(d[e].y--,d[e].scale+=.004,d[e].alpha-=.013,d[e].el.style.cssText=&quot;left:&quot;+d[e].x+&quot;px;top:&quot;+d[e].y+&quot;px;opacity:&quot;+d[e].alpha+&quot;;transform:scale(&quot;+d[e].scale+&quot;,&quot;+d[e].scale+&quot;) rotate(45deg);background:&quot;+d[e].color+&quot;;z-index:99999&quot;);requestAnimationFrame(r)&#125;function o()&#123;var t=&quot;function&quot;==typeof e.onclick&amp;&amp;e.onclick;e.onclick=function(e)&#123;t&amp;&amp;t(),i(e)&#125;&#125;function i(e)&#123;var a=t.createElement(&quot;div&quot;);a.className=&quot;heart&quot;,d.push(&#123;el:a,x:e.clientX-5,y:e.clientY-5,scale:1,alpha:1,color:s()&#125;),t.body.appendChild(a)&#125;function c(e)&#123;var a=t.createElement(&quot;style&quot;);a.type=&quot;text/css&quot;;try&#123;a.appendChild(t.createTextNode(e))&#125;catch(t)&#123;a.styleSheet.cssText=e&#125;t.getElementsByTagName(&quot;head&quot;)[0].appendChild(a)&#125;function s()&#123;return&quot;rgb(&quot;+~~(255*Math.random())+&quot;,&quot;+~~(255*Math.random())+&quot;,&quot;+~~(255*Math.random())+&quot;)&quot;&#125;var d=[];e.requestAnimationFrame=function()&#123;return e.requestAnimationFrame||e.webkitRequestAnimationFrame||e.mozRequestAnimationFrame||e.oRequestAnimationFrame||e.msRequestAnimationFrame||function(e)&#123;setTimeout(e,1e3/60)&#125;&#125;(),n()&#125;(window,document);</span><br></pre></td></tr></table></figure>
+
+<p>3、在<code>\themes\next\layout\_layout.swig</code>文件末尾添加：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- 页面点击小红心 --&gt;</span><br><span class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;/js/clicklove.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加社交信息"><a href="#添加社交信息" class="headerlink" title="添加社交信息"></a>添加社交信息</h3><p>1、打开主题配置<code>_config.yml</code>，进行相关参数修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 修改对应的社交信息。</span><br><span class="line">social:</span><br><span class="line">  GitHub: https://github.com/mebaron || fab fa-github</span><br><span class="line">  E-Mail: mailto:ecustbaron@gmail.com || fa fa-envelope</span><br><span class="line">  #Weibo: https://weibo.com/yourname || fab fa-weibo</span><br><span class="line">  #Google: https://plus.google.com/yourname || fab fa-google</span><br><span class="line">  #Twitter: https://twitter.com/yourname || fab fa-twitter</span><br><span class="line">  #FB Page: https://www.facebook.com/yourname || fab fa-facebook</span><br><span class="line">  #StackOverflow: https://stackoverflow.com/yourname || fab fa-stack-overflow</span><br><span class="line">  #YouTube: https://youtube.com/yourname || fab fa-youtube</span><br><span class="line">  #Instagram: https://instagram.com/yourname || fab fa-instagram</span><br><span class="line">  #Skype: skype:yourname?call|chat || fab fa-skype</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加背景"><a href="#添加背景" class="headerlink" title="添加背景"></a>添加背景</h3><p>1、下载相应的资源包：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 在工作目录执行</span><br><span class="line">git clone https://github.com/theme-next/theme-next-canvas-nest themes/next/source/lib/canvas-nest</span><br></pre></td></tr></table></figure>
+
+<p>2、在主题配置<code>themes/next/_config.yml</code>中做相关参数修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># Canvas-nest</span><br><span class="line"># Dependencies: https://github.com/theme-next/theme-next-canvas-nest</span><br><span class="line">canvas_nest: # 网络背景</span><br><span class="line">  enable: true</span><br><span class="line">  onmobile: true # display on mobile or not</span><br><span class="line">  color: &#x27;0,0,0&#x27; # RGB values, use &#x27;,&#x27; to separate</span><br><span class="line">  opacity: 0.5 # the opacity of line: 0~1</span><br><span class="line">  zIndex: -1 # z-index property of the background</span><br><span class="line">  count: 150 # the number of lines</span><br></pre></td></tr></table></figure>
+
+<h3 id="增加文章结束标志"><a href="#增加文章结束标志" class="headerlink" title="增加文章结束标志"></a>增加文章结束标志</h3><p>1、在路径/themes/next/layout/_macro文件夹中新建passage-end-tag.swig文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 切换到路径_macro</span><br><span class="line">cd [_macro路径]</span><br><span class="line"># 创建passage-end-tag.swig文件</span><br><span class="line">touch passage-end-tag.swig</span><br></pre></td></tr></table></figure>
+
+<p>2、打开passage-end-tag.swig文件，添加以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line">    &#123;% if not is_index %&#125;</span><br><span class="line">        &lt;div style=&quot;text-align:center;color: #ccc;font-size:14px;&quot;&gt;-------------本文结束&lt;i class=&quot;fa fa-paw&quot;&gt;&lt;/i&gt;感谢您的阅读-------------&lt;/div&gt;</span><br><span class="line">    &#123;% endif %&#125;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>3、打开/themes/next/layout/_macro/post.swig，在post-body之后，post-footer之前，添加以下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line">  &#123;% if not is_index %&#125;</span><br><span class="line">    &#123;% include &#x27;passage-end-tag.swig&#x27; %&#125;</span><br><span class="line">  &#123;% endif %&#125;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>4、然后打开主题配置文件<code>_config.yml</code>,在末尾添加：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 文章末尾添加“本文结束”标记</span><br><span class="line">passage_end_tag:</span><br><span class="line">  enabled: true</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加文章版权信息"><a href="#添加文章版权信息" class="headerlink" title="添加文章版权信息"></a>添加文章版权信息</h3><p>1、打开主题配置_config.yml，进行相关参数设置：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">creative_commons:</span><br><span class="line">  license: by-nc-sa</span><br><span class="line">  sidebar: true</span><br><span class="line">  post: true</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加搜索功能"><a href="#添加搜索功能" class="headerlink" title="添加搜索功能"></a>添加搜索功能</h3><p>1、安装hexo-generator-searchdb插件.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd 文件目录</span><br><span class="line">npm install hexo-generator-searchdb --save</span><br></pre></td></tr></table></figure>
+
+<p>2、打开<strong>站点</strong>配置文件(hexo的配置文件)<code>_config.yml</code>,添加配置:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 搜索</span><br><span class="line">search:</span><br><span class="line">  path: ./public/search.xml</span><br><span class="line">  field: post</span><br><span class="line">  format: html</span><br><span class="line">  limit: 10000</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>next</tag>
+        <tag>博客</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>nodejs版本管理工具nvm的使用</title>
+    <url>/2023/02/16/4.nodejs%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7nvm%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h2 id="nodejs版本管理工具nvm的使用"><a href="#nodejs版本管理工具nvm的使用" class="headerlink" title="nodejs版本管理工具nvm的使用"></a>nodejs版本管理工具nvm的使用</h2><h4 id="1、什么是nvm"><a href="#1、什么是nvm" class="headerlink" title="1、什么是nvm"></a>1、什么是nvm</h4><p>如今的web前端开发多数大多都离不开Node，而且node更新迭代很快；不同项目依赖的node版本不同，会导致需要安装对应的node版本才能正常运行;同时维护多个版本的node将会是一件非常麻烦的事情，此时此刻我们就需要一个可以安装多个node版本并随时可以切换的版本控制工具来简化我们的工作，常用的node版本管理工具有n、nvm、nvs，这里我主要介绍nvm。</p>
+<span id="more"></span>
+
+<h4 id="2、安装下载"><a href="#2、安装下载" class="headerlink" title="2、安装下载"></a>2、安装下载</h4><p><a href="https://github.com/coreybutler/nvm-windows/releases">nvm安装包下载地址</a></p>
+<h3 id="3、常见的使用命令"><a href="#3、常见的使用命令" class="headerlink" title="3、常见的使用命令"></a>3、常见的使用命令</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 显示nvm版本</span></span><br><span class="line">nvm v</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出本地已安装所有版本</span></span><br><span class="line">nvm list      </span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加可选参数available列出所有克下载版本</span></span><br><span class="line">nvm list available    </span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装node.js的命令 version指定版本号</span></span><br><span class="line">nvm install 10.22.0   </span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装最新稳定版node.js</span></span><br><span class="line">nvm install stable    </span><br><span class="line"></span><br><span class="line"><span class="comment"># 卸载node.js的命令 version指定版本号</span></span><br><span class="line">nvm uninstall 10.22.0 </span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换到指定的node.js版本，使用此版本nodejs</span></span><br><span class="line">nvm use 10.22.0   </span><br><span class="line"></span><br><span class="line"><span class="comment"># 启用node.js版本管理</span></span><br><span class="line">nvm on           </span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭node.js版本管理  </span></span><br><span class="line">nvm off                </span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+        <category>工具使用</category>
+      </categories>
+      <tags>
+        <tag>nodejs</tag>
+        <tag>nvm</tag>
+        <tag>版本管理</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>七层OSI模型</title>
+    <url>/2023/12/21/5.%E4%B8%83%E5%B1%82OSI%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<h2 id="七层OSI模型"><a href="#七层OSI模型" class="headerlink" title="七层OSI模型"></a>七层OSI模型</h2><p>七层OSI模型有应用层、表示层、会话层、传输层、网络层、数据链路层、物理层；各个层次上的典型网络协议如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">层次</th>
+<th align="center">协议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">应用层</td>
+<td align="center">HTTP、SMTP、FTP、Telnet</td>
+</tr>
+<tr>
+<td align="center">表示层</td>
+<td align="center">ASCII、MPEG、JPEG、MIDI</td>
+</tr>
+<tr>
+<td align="center">会话层</td>
+<td align="center">NetBIOS、SAP、SDP、NWLink</td>
+</tr>
+<tr>
+<td align="center">传输层</td>
+<td align="center">TCP、UDP、SPX</td>
+</tr>
+<tr>
+<td align="center">网络层</td>
+<td align="center">IP、IPX</td>
+</tr>
+<tr>
+<td align="center">数据链路层</td>
+<td align="center">Ethernet、Token Ring、FDDI、AppleTalk</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>网络</tag>
+        <tag>osi</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go交叉编译(Mac/Linux/Windows)</title>
+    <url>/2023/02/25/6.go%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91-Mac-Linux-Windows/</url>
+    <content><![CDATA[<h1 id="go交叉编译-Mac-Linux-Windows"><a href="#go交叉编译-Mac-Linux-Windows" class="headerlink" title="go交叉编译(Mac/Linux/Windows)"></a>go交叉编译(Mac/Linux/Windows)</h1><h2 id="1、MAC-下编译-Linux-、Windows"><a href="#1、MAC-下编译-Linux-、Windows" class="headerlink" title="1、MAC 下编译 Linux 、Windows"></a>1、MAC 下编译 Linux 、Windows</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#linux</span></span><br><span class="line"></span><br><span class="line">CGO_ENABLED=0 GOOS=linux GOARCH=amd64  go build  -o name   main.go</span><br></pre></td></tr></table></figure>
+
+<hr>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#windows</span></span><br><span class="line"></span><br><span class="line">CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build  -o name  main.go</span><br></pre></td></tr></table></figure>
+
+<h2 id="2、Linux-下编译-Mac、-Windows"><a href="#2、Linux-下编译-Mac、-Windows" class="headerlink" title="2、Linux 下编译 Mac、 Windows"></a>2、Linux 下编译 Mac、 Windows</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#Mac</span></span><br><span class="line"></span><br><span class="line">CGO_ENABLED=0 GOOS=darwin GOARCH=amd64  go build  -o name   main.go</span><br></pre></td></tr></table></figure>
+
+<hr>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#Windows</span></span><br><span class="line"></span><br><span class="line">CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build  -o name   main.go</span><br></pre></td></tr></table></figure>
+
+<h2 id="3、Windows-下编译-Mac-、Linux"><a href="#3、Windows-下编译-Mac-、Linux" class="headerlink" title="3、Windows 下编译 Mac 、Linux"></a>3、Windows 下编译 Mac 、Linux</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#Mac</span></span><br><span class="line"></span><br><span class="line">SET CGO_ENABLED=0</span><br><span class="line"></span><br><span class="line">SET GOOS=darwin</span><br><span class="line"></span><br><span class="line">SET GOARCH=amd64</span><br><span class="line"></span><br><span class="line">go build  -o name   main.go</span><br></pre></td></tr></table></figure>
+
+<hr>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#Linux</span></span><br><span class="line"></span><br><span class="line">SET CGO_ENABLED=0</span><br><span class="line"></span><br><span class="line">SET GOOS=linux</span><br><span class="line"></span><br><span class="line">SET GOARCH=amd64</span><br><span class="line"></span><br><span class="line">go build  -o name   main.go</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>go</tag>
+        <tag>build</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>01背包问题(go实现)</title>
+    <url>/2023/02/27/8.01%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98-go%E5%AE%9E%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="01背包问题-go实现"><a href="#01背包问题-go实现" class="headerlink" title="01背包问题(go实现)"></a>01背包问题(go实现)</h1><h2 id="1-问题"><a href="#1-问题" class="headerlink" title="1.问题"></a>1.问题</h2><p>有 N 件物品和一个容量是 V 的背包。每件物品只能使用一次。</p>
+<p>第 i 件物品的体积是 vi，价值是 wi。</p>
+<p>求解将哪些物品装入背包，可使这些物品的总体积不超过背包容量，且总价值最大。</p>
+<p>输出最大价值。</p>
+<p>输入格式</p>
+<p>​    第一行两个整数，N，V，用空格隔开，分别表示物品数量和背包容积。</p>
+<p>​    接下来有 N 行，每行两个整数 vi,wi，用空格隔开，分别表示第 i 件物品的体积和价值。</p>
+<p>输出格式</p>
+<p>​    输出一个整数，表示最大价值。</p>
+<p>数据范围</p>
+<p>​    0&lt;N,V≤1000</p>
+<p>​    0&lt;vi,wi≤1000</p>
+<span id="more"></span>
+
+<h2 id="2-解题思路及代码实现"><a href="#2-解题思路及代码实现" class="headerlink" title="2.解题思路及代码实现"></a>2.解题思路及代码实现</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	   问题：</span></span><br><span class="line"><span class="comment">	   有 N 件物品和一个容量是 V 的背包。每件物品只能使用一次。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	   第 i 件物品的体积是 vi，价值是 wi。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	   求解将哪些物品装入背包，可使这些物品的总体积不超过背包容量，且总价值最大。</span></span><br><span class="line"><span class="comment">	   输出最大价值。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	   输入格式</span></span><br><span class="line"><span class="comment">	   第一行两个整数，N，V，用空格隔开，分别表示物品数量和背包容积。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	   接下来有 N 行，每行两个整数 vi,wi，用空格隔开，分别表示第 i 件物品的体积和价值。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	   输出格式</span></span><br><span class="line"><span class="comment">	   输出一个整数，表示最大价值。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	   数据范围</span></span><br><span class="line"><span class="comment">	   0&lt;N,V≤1000</span></span><br><span class="line"><span class="comment">	   0&lt;vi,wi≤1000</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	optimize()</span><br><span class="line">	<span class="comment">// simplicity()</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">max</span><span class="params">(x, y <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> x &lt; y &#123;</span><br><span class="line">		<span class="keyword">return</span> y</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> x</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">simplicity</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">		思路：</span></span><br><span class="line"><span class="comment">		   1、朴素实现</span></span><br><span class="line"><span class="comment">		   f[i][j]:表示前i件物品恰放入一个容量为j的背包可以获得的最大价值。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		   转移方程：</span></span><br><span class="line"><span class="comment">		   1.不选第i件物品。</span></span><br><span class="line"><span class="comment">		   f[i][j]=f[i-1][j]</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		   2.选择第i件物品。</span></span><br><span class="line"><span class="comment">		   f[i][j]=f[i-1][j-v[i]]+w[i]</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		   汇总：</span></span><br><span class="line"><span class="comment">		   f[i][j]=max&#123;f[i-1][j],f[i-1][j-v[i]]+w[i]&#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		复杂度：</span></span><br><span class="line"><span class="comment">			时间和空间复杂度均为O(N*V)</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="keyword">const</span> N = <span class="number">1010</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> n, m <span class="type">int</span></span><br><span class="line">	<span class="keyword">var</span> v, w [N]<span class="type">int</span></span><br><span class="line">	<span class="keyword">var</span> f [N][N]<span class="type">int</span></span><br><span class="line"></span><br><span class="line">	fmt.Scanf(<span class="string">&quot;%d %d\n&quot;</span>, &amp;n, &amp;m)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= n; i++ &#123;</span><br><span class="line">		fmt.Scanf(<span class="string">&quot;%d %d\n&quot;</span>, &amp;v[i], &amp;w[i])</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= n; i++ &#123;</span><br><span class="line">		<span class="keyword">for</span> j := <span class="number">0</span>; j &lt;= m; j++ &#123;</span><br><span class="line">			f[i][j] = f[i<span class="number">-1</span>][j]</span><br><span class="line">			<span class="keyword">if</span> j &gt;= v[i] &#123;</span><br><span class="line">				f[i][j] = max(f[i][j], f[i<span class="number">-1</span>][j-v[i]]+w[i])</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(f[n][m])</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">optimize</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">		1、优化空间复杂度</span></span><br><span class="line"><span class="comment">		   f[j]:表示容量为j的背包可以获得的最大价值。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		   转移方程：</span></span><br><span class="line"><span class="comment">		   1.不选第i件物品。</span></span><br><span class="line"><span class="comment">		   f[j]=f[j]</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		   2.选择第i件物品。</span></span><br><span class="line"><span class="comment">		   f[j]=f[j-v[i]]+w[i]</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		   汇总：</span></span><br><span class="line"><span class="comment">		   f[j]=max&#123;f[j],f[j-v[i]]+w[i]&#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		复杂度：</span></span><br><span class="line"><span class="comment">			时间复杂度均为O(N*V)</span></span><br><span class="line"><span class="comment">			空间复杂度均为O(V)</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="keyword">const</span> N = <span class="number">1010</span></span><br><span class="line">	<span class="keyword">var</span> n, m <span class="type">int</span></span><br><span class="line">	<span class="keyword">var</span> v, w [N]<span class="type">int</span></span><br><span class="line">	<span class="keyword">var</span> f [N]<span class="type">int</span></span><br><span class="line"></span><br><span class="line">	fmt.Scanf(<span class="string">&quot;%d %d\n&quot;</span>, &amp;n, &amp;m)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= n; i++ &#123;</span><br><span class="line">		fmt.Scanf(<span class="string">&quot;%d %d\n&quot;</span>, &amp;v[i], &amp;w[i])</span><br><span class="line">		<span class="keyword">for</span> j := m; j &gt;= v[i]; j-- &#123;</span><br><span class="line">			f[j] = max(f[j], f[j-v[i]]+w[i])</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(f[m])</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>go</tag>
+        <tag>01背包问题</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>完全背包问题(go实现)</title>
+    <url>/2023/02/27/9.%E5%AE%8C%E5%85%A8%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98-go%E5%AE%9E%E7%8E%B0/</url>
+    <content><![CDATA[<h1 id="完全背包问题-go实现"><a href="#完全背包问题-go实现" class="headerlink" title="完全背包问题(go实现)"></a>完全背包问题(go实现)</h1><h2 id="1-题目"><a href="#1-题目" class="headerlink" title="1.题目"></a>1.题目</h2><p>有 N 种物品和一个容量是 V 的背包，每种物品都有无限件可用。</p>
+<p>第 i 种物品的体积是 vi，价值是 wi。</p>
+<p>求解将哪些物品装入背包，可使这些物品的总体积不超过背包容量，且总价值最大。</p>
+<p>输出最大价值。</p>
+<p>输入格式：</p>
+<p>​    第一行两个整数，N，V，用空格隔开，分别表示物品种数和背包容积。</p>
+<p>​    接下来有 N 行，每行两个整数 vi,wi，用空格隔开，分别表示第 i 种物品的体积和价值。</p>
+<p>输出格式：</p>
+<p>​    输出一个整数，表示最大价值。</p>
+<p>数据范围：</p>
+<p>​    0&lt;N,V≤1000</p>
+<p>​    0&lt;vi,wi≤1000</p>
+<span id="more"></span>
+
+<h2 id="2-解题思路及代码实现"><a href="#2-解题思路及代码实现" class="headerlink" title="2.解题思路及代码实现"></a>2.解题思路及代码实现</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	   题目：</span></span><br><span class="line"><span class="comment">	   有 N 种物品和一个容量是 V 的背包，每种物品都有无限件可用。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	   第 i 种物品的体积是 vi，价值是 wi。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	   求解将哪些物品装入背包，可使这些物品的总体积不超过背包容量，且总价值最大。</span></span><br><span class="line"><span class="comment">	   输出最大价值。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	   输入格式</span></span><br><span class="line"><span class="comment">	   第一行两个整数，N，V，用空格隔开，分别表示物品种数和背包容积。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	   接下来有 N 行，每行两个整数 vi,wi，用空格隔开，分别表示第 i 种物品的体积和价值。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	   输出格式</span></span><br><span class="line"><span class="comment">	   输出一个整数，表示最大价值。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	   数据范围</span></span><br><span class="line"><span class="comment">	   0&lt;N,V≤1000</span></span><br><span class="line"><span class="comment">	   0&lt;vi,wi≤1000</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	simplicity()</span><br><span class="line">	<span class="comment">// optimize()</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">max</span><span class="params">(x, y <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> x &lt; y &#123;</span><br><span class="line">		<span class="keyword">return</span> y</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> x</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">simplicity</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">		1.朴素解法</span></span><br><span class="line"><span class="comment">		状态表示：f[i][j] 表示考虑前i个物品的情况下，总体积为j时的最大价值。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		转移方程：</span></span><br><span class="line"><span class="comment">		1.不考虑i个物品的情况</span></span><br><span class="line"><span class="comment">		f[i][j] = f[i-1][j]</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		2.考虑第i个物品的情况</span></span><br><span class="line"><span class="comment">		f[i][j] = f[i-1][j-k*v[i]]+k*w[i]  k在体积足够的情况下穷举</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		汇总：</span></span><br><span class="line"><span class="comment">		f[i][j] = max&#123;f[i-1][j],f[i-1][j-k*v[i]]+k*w[i]&#125; k在体积足够的情况下穷举</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		复杂度：</span></span><br><span class="line"><span class="comment">		时间复杂度O(N*V*K)</span></span><br><span class="line"><span class="comment">		空间复杂度O(N*V)</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">const</span> N = <span class="number">1010</span></span><br><span class="line">	<span class="keyword">var</span> n, m <span class="type">int</span></span><br><span class="line">	<span class="keyword">var</span> v, w [N]<span class="type">int</span></span><br><span class="line">	<span class="keyword">var</span> f [N][N]<span class="type">int</span></span><br><span class="line"></span><br><span class="line">	fmt.Scanf(<span class="string">&quot;%d %d\n&quot;</span>, &amp;n, &amp;m)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= n; i++ &#123;</span><br><span class="line">		fmt.Scanf(<span class="string">&quot;%d %d\n&quot;</span>, &amp;v[i], &amp;w[i])</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= n; i++ &#123;</span><br><span class="line">		<span class="keyword">for</span> j := m; j &gt;= v[i]; j-- &#123;</span><br><span class="line">			<span class="keyword">for</span> k := <span class="number">0</span>; k*v[i] &lt;= j; k++ &#123;</span><br><span class="line">				f[i][j] = max(f[i<span class="number">-1</span>][j], f[i<span class="number">-1</span>][j-k*v[i]]+k*w[i])</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(f[n][m])</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">optimize</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">		2.优化实现</span></span><br><span class="line"><span class="comment">		状态表示：f[i]表示总体积为i时的最大价值。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		转移方程：</span></span><br><span class="line"><span class="comment">		for i=1...n</span></span><br><span class="line"><span class="comment">		for j=0...m</span></span><br><span class="line"><span class="comment">		f[j]= max&#123;f[j], f[j - v[i]] + w[i]&#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		复杂度：</span></span><br><span class="line"><span class="comment">		时间复杂度O(VN)</span></span><br><span class="line"><span class="comment">		空间复杂度O(V)</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		证明一下转移方程的正确性（数学归纳法）：</span></span><br><span class="line"><span class="comment">		初始条件：f[0] = 0</span></span><br><span class="line"><span class="comment">		1、假设考虑前i-1个物品之后，所有的f[j]是正确的。</span></span><br><span class="line"><span class="comment">		2、证明： 考虑完i个物品之后，所有的f[j]是正确的。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		对某个j而言，如果最优解中包含k个v[i]，</span></span><br><span class="line"><span class="comment">		则有：</span></span><br><span class="line"><span class="comment">		f[j - k*v[i]] 不包含第i个物品的情况；此时所有的f[j]是正确的。 ------ （假设条件）</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">		递推：</span></span><br><span class="line"><span class="comment">		转移方程：	f[j] = max&#123; f[j], f[j - v[i]] + w[i] &#125;</span></span><br><span class="line"><span class="comment">		则</span></span><br><span class="line"><span class="comment">		f[j] = max&#123;f[j],f[j - (k-1)*v[i] -v[i]] + w[i]&#125;  包含1个v[i]的情况</span></span><br><span class="line"><span class="comment">		...</span></span><br><span class="line"><span class="comment">		f[j] = max&#123;f[j], f[j - v[i]] + w[i]&#125; 包含k-1个v[i]的情况</span></span><br><span class="line"><span class="comment">		f[j] = max&#123;f[j], f[j]&#125; 包含k个v[i]的情况</span></span><br><span class="line"><span class="comment">		表明，在考虑完第i个物品之后，所有的f[j]也是正确的。</span></span><br><span class="line"><span class="comment">		证毕。</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="keyword">const</span> N = <span class="number">1010</span></span><br><span class="line">	<span class="keyword">var</span> n, m <span class="type">int</span></span><br><span class="line">	<span class="keyword">var</span> v, w [N]<span class="type">int</span></span><br><span class="line">	<span class="keyword">var</span> f [N]<span class="type">int</span></span><br><span class="line"></span><br><span class="line">	fmt.Scanf(<span class="string">&quot;%d %d\n&quot;</span>, &amp;n, &amp;m)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= n; i++ &#123;</span><br><span class="line">		fmt.Scanf(<span class="string">&quot;%d %d\n&quot;</span>, &amp;v[i], &amp;w[i])</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= n; i++ &#123;</span><br><span class="line">		<span class="keyword">for</span> j := <span class="number">0</span>; j &lt;= m; j++ &#123;</span><br><span class="line">			<span class="keyword">if</span> j &gt;= v[i] &#123;</span><br><span class="line">				f[j] = max(f[j], f[j-v[i]]+w[i])</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(f[m])</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>技术</category>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>go</tag>
+        <tag>完全背包</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>dd大牛的《背包九讲》</title>
+    <url>/2023/02/25/7.dd%E5%A4%A7%E7%89%9B%E7%9A%84%E3%80%8A%E8%83%8C%E5%8C%85%E4%B9%9D%E8%AE%B2%E3%80%8B/</url>
+    <content><![CDATA[<h1 id="dd大牛的《背包九讲》"><a href="#dd大牛的《背包九讲》" class="headerlink" title="dd大牛的《背包九讲》"></a>dd大牛的《背包九讲》</h1><h2 id="1-01背包问题"><a href="#1-01背包问题" class="headerlink" title="1.01背包问题"></a>1.01背包问题</h2><h3 id="1-1-题目"><a href="#1-1-题目" class="headerlink" title="1.1.题目"></a>1.1.题目</h3><p>有N件物品和一个容量为V的背包。第i件物品的费用是c[i]，价值是w[i]。求解将哪些物品装入背包可使这些物品的费用总和不超过背包容量，且价值总和最大。</p>
+<h3 id="1-2-基本思路"><a href="#1-2-基本思路" class="headerlink" title="1.2.基本思路"></a>1.2.基本思路</h3><p>这是最基础的背包问题，特点是：每种物品仅有一件，可以选择放或不放。</p>
+<p>用子问题定义状态：即<code>f[i][v]</code>表示前i件物品恰放入一个容量为v的背包可以获得的最大价值。则其状态转移方程便是：</p>
+<p><code>f[i][v]=max&#123;f[i-1][v],f[i-1][v-c[i]]+w[i]&#125;</code>。</p>
+<span id="more"></span>
+
+<p>这个方程非常重要，基本上所有跟背包相关的问题的方程都是由它衍生出来的。所以有必要将它详细解释一下：“将前i件物品放入容量为v的背包中”这个子问题，若只考虑第i件物品的策略（放或不放），那么就可以转化为一个只牵扯前i-1件物品的问题。如果不放第i件物品，那么问题就转化为“前i-1件物品放入容量为v的背包中”；如果放第i件物品，那么问题就转化为“前i-1件物品放入剩下的容量为<code>v-c[i]</code>的背包中”，此时能获得的最大价值就是<code>f [i-1][v-c[i]]</code>再加上通过放入第i件物品获得的价值w[i]。</p>
+<p>注意<code>f[i][v]</code>有意义当且仅当存在一个前i件物品的子集，其费用总和为v。所以按照这个方程递推完毕后，最终的答案并不一定是<code>f[N] [V]</code>，而是<code>f[N][0..V]</code>的最大值。如果将状态的定义中的“恰”字去掉，在转移方程中就要再加入一项<code>f[i][v-1]</code>，这样就可以保证f[N] [V]就是最后的答案。至于为什么这样就可以，由你自己来体会了。</p>
+<h3 id="1-3-优化空间复杂度"><a href="#1-3-优化空间复杂度" class="headerlink" title="1.3.优化空间复杂度"></a>1.3.优化空间复杂度</h3><p>以上方法的时间和空间复杂度均为O(N*V)，其中时间复杂度基本已经不能再优化了，但空间复杂度却可以优化到O(V)。</p>
+<p>先考虑上面讲的基本思路如何实现，肯定是有一个主循环i=1..N，每次算出来二维数组<code>f[i][0..V]</code>的所有值。那么，如果只用一个数组f [0..V]，能不能保证第i次循环结束后f[v]中表示的就是我们定义的状态<code>f[i][v]</code>呢？<code>f[i][v]</code>是由<code>f[i-1][v]</code>和f[i-1] [v-c[i]]两个子问题递推而来，能否保证在推<code>f[i][v]</code>时（也即在第i次主循环中推f[v]时）能够得到<code>f[i-1][v]</code>和<code>f[i-1][v -c[i]]</code>的值呢？事实上，这要求在每次主循环中我们以v=V..0的顺序推f[v]，这样才能保证推f[v]时f[v-c[i]]保存的是状态<code>f[i -1][v-c[i]]</code>的值。伪代码如下：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i=<span class="number">1.</span>.N</span><br><span class="line"><span class="keyword">for</span> v=V.<span class="number">.0</span></span><br><span class="line">f[v]=max&#123;f[v],f[v-c[i]]+w[i]&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>其中的f[v]=max{f[v],f[v-c[i]]}一句恰就相当于我们的转移方程<code>f[i][v]=max&#123;f[i-1][v],f[i- 1][v-c[i]]&#125;</code>，因为现在的f[v-c[i]]就相当于原来的<code>f[i-1][v-c[i]]</code>。如果将v的循环顺序从上面的逆序改成顺序的话，那么则成了<code>f[i][v]</code>由<code>f[i][v-c[i]]</code>推知，与本题意不符，但它却是另一个重要的背包问题P02最简捷的解决方案，故学习只用一维数组解01背包问题是十分必要的。</p>
+<h3 id="1-4-总结"><a href="#1-4-总结" class="headerlink" title="1.4.总结"></a>1.4.总结</h3><p>01背包问题是最基本的背包问题，它包含了背包问题中设计状态、方程的最基本思想，另外，别的类型的背包问题往往也可以转换成01背包问题求解。故一定要仔细体会上面基本思路的得出方法，状态转移方程的意义，以及最后怎样优化的空间复杂度。</p>
+<h2 id="2-完全背包问题"><a href="#2-完全背包问题" class="headerlink" title="2. 完全背包问题"></a>2. 完全背包问题</h2><h3 id="2-1-题目"><a href="#2-1-题目" class="headerlink" title="2.1.题目"></a>2.1.题目</h3><p>有N种物品和一个容量为V的背包，每种物品都有无限件可用。第i种物品的费用是c[i]，价值是w[i]。求解将哪些物品装入背包可使这些物品的费用总和不超过背包容量，且价值总和最大。</p>
+<h3 id="2-2-基本思路"><a href="#2-2-基本思路" class="headerlink" title="2.2.基本思路"></a>2.2.基本思路</h3><p>这个问题非常类似于01背包问题，所不同的是每种物品有无限件。也就是从每种物品的角度考虑，与它相关的策略已并非取或不取两种，而是有取0件、取1件、取2件……等很多种。如果仍然按照解01背包时的思路，令<code>f[i][v]</code>表示前i种物品恰放入一个容量为v的背包的最大权值。仍然可以按照每种物品不同的策略写出状态转移方程，像这样：<code>f[i][v]=max&#123;f[i-1][v-k*c[i]]+k*w[i]|0&lt;=k*c[i]&lt;= v&#125;</code>。这跟01背包问题一样有<code>O(N*V)</code>个状态需要求解，但求解每个状态的时间则不是常数了，求解状态<code>f[i][v]</code>的时间是O(v/c[i])，总的复杂度是超过<code>O(VN)</code>的。</p>
+<p>将01背包问题的基本思路加以改进，得到了这样一个清晰的方法。这说明01背包问题的方程的确是很重要，可以推及其它类型的背包问题。但我们还是试图改进这个复杂度。</p>
+<h3 id="2-3-一个简单有效的优化"><a href="#2-3-一个简单有效的优化" class="headerlink" title="2.3.一个简单有效的优化"></a>2.3.一个简单有效的优化</h3><p>完全背包问题有一个很简单有效的优化，是这样的：若两件物品i、j满足<code>c[i]&lt;=c[j]</code>且<code>w[i]&gt;=w[j]</code>，则将物品j去掉，不用考虑。这个优化的正确性显然：任何情况下都可将价值小费用高得j换成物美价廉的i，得到至少不会更差的方案。对于随机生成的数据，这个方法往往会大大减少物品的件数，从而加快速度。然而这个并不能改善最坏情况的复杂度，因为有可能特别设计的数据可以一件物品也去不掉。</p>
+<p>转化为01背包问题求解<br>既然01背包问题是最基本的背包问题，那么我们可以考虑把完全背包问题转化为01背包问题来解。最简单的想法是，考虑到第i种物品最多选<code>V/c [i]</code>件，于是可以把第i种物品转化为<code>V/c[i]</code>件费用及价值均不变的物品，然后求解这个01背包问题。这样完全没有改进基本思路的时间复杂度，但这毕竟给了我们将完全背包问题转化为01背包问题的思路：将一种物品拆成多件物品。</p>
+<p>更高效的转化方法是：把第i种物品拆成费用为<code>c[i]*2^k</code>、价值为<code>w[i]*2^k</code>的若干件物品，其中k满足<code>c[i]*2^k&lt;V</code>。这是二进制的思想，因为不管最优策略选几件第i种物品，总可以表示成若干个<code>2^k</code>件物品的和。这样把每种物品拆成<code>O(log(V/c[i]))</code>件物品，是一个很大的改进。但我们有更优的<code>O(VN)</code>的算法。<code> * O(VN)</code>的算法这个算法使用一维数组，先看伪代码：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i=<span class="number">1.</span>.N </span><br><span class="line"><span class="keyword">for</span> v=<span class="number">0.</span>.V </span><br><span class="line">f[v]=max&#123;f[v],f[v-c[i]]+w[i]&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>你会发现，这个伪代码与01背包问题的伪代码只有v的循环次序不同而已。为什么这样一改就可行呢？首先想想为什么01背包问题中要按照v=V..0的逆序来循环。这是因为要保证第i次循环中的状态<code>f[i][v]</code>是由状态<code>f[i-1][v-c[i]]</code>递推而来。换句话说，这正是为了保证每件物品只选一次，保证在考虑“选入第i件物品”这件策略时，依据的是一个绝无已经选入第i件物品的子结果<code>f[i-1][v-c[i]]</code>。而现在完全背包的特点恰是每种物品可选无限件，所以在考虑“加选一件第i种物品”这种策略时，却正需要一个可能已选入第i种物品的子结果<code>f[i][v-c[i]]</code>，所以就可以并且必须采用v= 0..V的顺序循环。这就是这个简单的程序为何成立的道理。</p>
+<p>这个算法也可以以另外的思路得出。例如，基本思路中的状态转移方程可以等价地变形成这种形式：<code>f[i][v]=max&#123;f[i-1][v],f[i][v-c[i]]+w[i]&#125;</code>，将这个方程用一维数组实现，便得到了上面的伪代码。</p>
+<h3 id="2-4-总结"><a href="#2-4-总结" class="headerlink" title="2.4.总结"></a>2.4.总结</h3><p>完全背包问题也是一个相当基础的背包问题，它有两个状态转移方程，分别在“基本思路”以及“<code>O(VN)</code>的算法“的小节中给出。希望你能够对这两个状态转移方程都仔细地体会，不仅记住，也要弄明白它们是怎么得出来的，最好能够自己想一种得到这些方程的方法。事实上，对每一道动态规划题目都思考其方程的意义以及如何得来，是加深对动态规划的理解、提高动态规划功力的好方法。</p>
+<h2 id="3-多重背包问题"><a href="#3-多重背包问题" class="headerlink" title="3.多重背包问题"></a>3.多重背包问题</h2><h3 id="3-1-题目"><a href="#3-1-题目" class="headerlink" title="3.1.题目"></a>3.1.题目</h3><p>有N种物品和一个容量为V的背包。第i种物品最多有n[i]件可用，每件费用是c[i]，价值是w[i]。求解将哪些物品装入背包可使这些物品的费用总和不超过背包容量，且价值总和最大。</p>
+<h3 id="3-2-基本算法"><a href="#3-2-基本算法" class="headerlink" title="3.2.基本算法"></a>3.2.基本算法</h3><p>这题目和完全背包问题很类似。基本的方程只需将完全背包问题的方程略微一改即可，因为对于第i种物品有n[i]+1种策略：取0件，取1件……取 n[i]件。令<code>f[i][v]</code>表示前i种物品恰放入一个容量为v的背包的最大权值，则：<code>f[i][v]=max&#123;f[i-1][v-k*c[i]]+ k*w[i]|0&lt;=k&lt;=n[i]&#125;</code>。复杂度是<code>O(V*∑n[i])</code>。</p>
+<p>转化为01背包问题<br>另一种好想好写的基本方法是转化为01背包求解：把第i种物品换成n[i]件01背包中的物品，则得到了物品数为<code>∑n[i]</code>的01背包问题，直接求解，复杂度仍然是<code>O(V*∑n[i])</code>。</p>
+<p>但是我们期望将它转化为01背包问题之后能够像完全背包一样降低复杂度。仍然考虑二进制的思想，我们考虑把第i种物品换成若干件物品，使得原问题中第i种物品可取的每种策略——取0..n[i]件——均能等价于取若干件代换以后的物品。另外，取超过n[i]件的策略必不能出现。</p>
+<p>方法是：将第i种物品分成若干件物品，其中每件物品有一个系数，这件物品的费用和价值均是原来的费用和价值乘以这个系数。使这些系数分别为 <code>1,2,4,...,2^(k-1)</code>,<code>n[i]-2^k+1</code>，且k是满足<code>n[i]-2^k+1&gt;0</code>的最大整数。例如，如果n[i]为13，就将这种物品分成系数分别为1,2,4,6的四件物品。</p>
+<p>分成的这几件物品的系数和为n[i]，表明不可能取多于n[i]件的第i种物品。另外这种方法也能保证对于<code>0..n[i]</code>间的每一个整数，均可以用若干个系数的和表示，这个证明可以分<code>0..2^k-1</code>和<code>2^k..n[i]</code>两段来分别讨论得出，并不难，希望你自己思考尝试一下。</p>
+<p>这样就将第i种物品分成了<code>O(log n[i])</code>种物品，将原问题转化为了复杂度为<code>O(V*∑log n[i])</code>的01背包问题，是很大的改进。</p>
+<h3 id="3-3-O-VN-的算法"><a href="#3-3-O-VN-的算法" class="headerlink" title="3.3.O(VN)的算法"></a>3.3.<code>O(VN)</code>的算法</h3><p>多重背包问题同样有<code>O(VN)</code>的算法。这个算法基于基本算法的状态转移方程，但应用单调队列的方法使每个状态的值可以以均摊O(1)的时间求解。由于用单调队列优化的DP已超出了<code>NOIP</code>的范围，故本文不再展开讲解。我最初了解到这个方法是在楼天成的“男人八题”幻灯片上。</p>
+<h3 id="3-4-小结"><a href="#3-4-小结" class="headerlink" title="3.4.小结"></a>3.4.小结</h3><p>这里我们看到了将一个算法的复杂度由<code>O(V*∑n[i])</code>改进到<code>O(V*∑log n[i])</code>的过程，还知道了存在应用超出<code>NOIP</code>范围的知识的<code>O(VN)</code>算法。希望你特别注意“拆分物品”的思想和方法，自己证明一下它的正确性，并用尽量简洁的程序来实现。</p>
+<h2 id="4-混合三种背包问题"><a href="#4-混合三种背包问题" class="headerlink" title="4.混合三种背包问题"></a>4.混合三种背包问题</h2><h3 id="4-1-问题"><a href="#4-1-问题" class="headerlink" title="4.1.问题"></a>4.1.问题</h3><p>如果将P01、P02、P03混合起来。也就是说，有的物品只可以取一次（01背包），有的物品可以取无限次（完全背包），有的物品可以取的次数有一个上限（多重背包）。应该怎么求解呢？</p>
+<h3 id="4-2-01背包与完全背包的混合"><a href="#4-2-01背包与完全背包的混合" class="headerlink" title="4.2.01背包与完全背包的混合"></a>4.2.01背包与完全背包的混合</h3><p>考虑到在P01和P02中最后给出的伪代码只有一处不同，故如果只有两类物品：一类物品只能取一次，另一类物品可以取无限次，那么只需在对每个物品应用转移方程时，根据物品的类别选用顺序或逆序的循环即可，复杂度是<code>O(VN)</code>。伪代码如下：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">for</span> i=<span class="number">1.</span>.N</span><br><span class="line"><span class="keyword">if</span> 第i件物品是<span class="number">01</span>背包</span><br><span class="line"><span class="keyword">for</span> v=V.<span class="number">.0</span></span><br><span class="line">f[v]=max&#123;f[v],f[v-c[i]]+w[i]&#125;;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> 第i件物品是完全背包</span><br><span class="line"><span class="keyword">for</span> v=<span class="number">0.</span>.V</span><br><span class="line">f[v]=max&#123;f[v],f[v-c[i]]+w[i]&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-再加上多重背包"><a href="#4-3-再加上多重背包" class="headerlink" title="4.3.再加上多重背包"></a>4.3.再加上多重背包</h3><p>如果再加上有的物品最多可以取有限次，那么原则上也可以给出<code>O(VN)</code>的解法：遇到多重背包类型的物品用单调队列解即可。但如果不考虑超过NOIP范围的算法的话，用P03中将每个这类物品分成O(log n[i])个01背包的物品的方法也已经很优了。</p>
+<h3 id="4-4-小结"><a href="#4-4-小结" class="headerlink" title="4.4.小结"></a>4.4.小结</h3><p>有人说，困难的题目都是由简单的题目叠加而来的。这句话是否公理暂且存之不论，但它在本讲中已经得到了充分的体现。本来01背包、完全背包、多重背包都不是什么难题，但将它们简单地组合起来以后就得到了这样一道一定能吓倒不少人的题目。但只要基础扎实，领会三种基本背包问题的思想，就可以做到把困难的题目拆分成简单的题目来解决。</p>
+<h2 id="5-二维费用的背包问题"><a href="#5-二维费用的背包问题" class="headerlink" title="5.二维费用的背包问题"></a>5.二维费用的背包问题</h2><h3 id="5-1-问题"><a href="#5-1-问题" class="headerlink" title="5.1.问题"></a>5.1.问题</h3><p>二维费用的背包问题是指：对于每件物品，具有两种不同的费用；选择这件物品必须同时付出这两种代价；对于每种代价都有一个可付出的最大值（背包容量）。问怎样选择物品可以得到最大的价值。设这两种代价分别为代价1和代价2，第i件物品所需的两种代价分别为a[i]和b[i]。两种代价可付出的最大值（两种背包容量）分别为V和U。物品的价值为w[i]。</p>
+<h3 id="5-2-算法"><a href="#5-2-算法" class="headerlink" title="5.2.算法"></a>5.2.算法</h3><p>费用加了一维，只需状态也加一维即可。设<code>f[i][v][u]</code>表示前i件物品付出两种代价分别为v和u时可获得的最大价值。状态转移方程就是：<code>f [i][v][u]=max&#123;f[i-1][v][u],f[i-1][v-a[i]][u-b[i]]+w[i]&#125;</code>。如前述方法，可以只使用二维的数组：当每件物品只可以取一次时变量v和u采用顺序的循环，当物品有如完全背包问题时采用逆序的循环。当物品有如多重背包问题时拆分物品。</p>
+<h3 id="5-3-物品总个数的限制"><a href="#5-3-物品总个数的限制" class="headerlink" title="5.3.物品总个数的限制"></a>5.3.物品总个数的限制</h3><p>有时，“二维费用”的条件是以这样一种隐含的方式给出的：最多只能取M件物品。这事实上相当于每件物品多了一种“件数”的费用，每个物品的件数费用均为1，可以付出的最大件数费用为M。换句话说，设<code>f[v][m]</code>表示付出费用v、最多选m件时可得到的最大价值，则根据物品的类型（01、完全、多重）用不同的方法循环更新，最后在<code>f[0..V</code>][0..M]范围内寻找答案。</p>
+<p>另外，如果要求“恰取M件物品”，则在<code>f[0..V][M]</code>范围内寻找答案。</p>
+<h3 id="5-4-小结"><a href="#5-4-小结" class="headerlink" title="5.4.小结"></a>5.4.小结</h3><p>事实上，当发现由熟悉的动态规划题目变形得来的题目时，在原来的状态中加一纬以满足新的限制是一种比较通用的方法。希望你能从本讲中初步体会到这种方法。</p>
+<h2 id="6-分组的背包问题"><a href="#6-分组的背包问题" class="headerlink" title="6.分组的背包问题"></a>6.分组的背包问题</h2><h3 id="6-1-问题"><a href="#6-1-问题" class="headerlink" title="6.1.问题"></a>6.1.问题</h3><p>有N件物品和一个容量为V的背包。第i件物品的费用是c[i]，价值是w[i]。这些物品被划分为若干组，每组中的物品互相冲突，最多选一件。求解将哪些物品装入背包可使这些物品的费用总和不超过背包容量，且价值总和最大。</p>
+<h3 id="6-2-算法"><a href="#6-2-算法" class="headerlink" title="6.2.算法"></a>6.2.算法</h3><p>这个问题变成了每组物品有若干种策略：是选择本组的某一件，还是一件都不选。也就是说设<code>f[k</code>][v]表示前k组物品花费费用v能取得的最大权值，则有<code>f[k][v]=max&#123;f[k-1][v],f[k-1][v-c[i]]+w[i]|</code>物品i属于第k组}。</p>
+<p>使用一维数组的伪代码如下：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> 所有的组k</span><br><span class="line"><span class="keyword">for</span> 所有的i属于组k</span><br><span class="line"><span class="keyword">for</span> v=V.<span class="number">.0</span></span><br><span class="line">f[v]=max&#123;f[v],f[v-c[i]]+w[i]&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>另外，显然可以对每组中的物品应用P02中“一个简单有效的优化”。</p>
+<h3 id="6-3-小结"><a href="#6-3-小结" class="headerlink" title="6.3.小结"></a>6.3.小结</h3><p>分组的背包问题将彼此互斥的若干物品称为一个组，这建立了一个很好的模型。不少背包问题的变形都可以转化为分组的背包问题（例如P07），由分组的背包问题进一步可定义“泛化物品”的概念，十分有利于解题。 </p>
+<h2 id="7-有依赖的背包问题"><a href="#7-有依赖的背包问题" class="headerlink" title="7.有依赖的背包问题"></a>7.有依赖的背包问题</h2><h3 id="7-1-简化的问题"><a href="#7-1-简化的问题" class="headerlink" title="7.1.简化的问题"></a>7.1.简化的问题</h3><p>这种背包问题的物品间存在某种“依赖”的关系。也就是说，i依赖于j，表示若选物品i，则必须选物品j。为了简化起见，我们先设没有某个物品既依赖于别的物品，又被别的物品所依赖；另外，没有某件物品同时依赖多件物品。</p>
+<h3 id="7-2-算法"><a href="#7-2-算法" class="headerlink" title="7.2.算法"></a>7.2.算法</h3><p>这个问题由NOIP2006金明的预算方案一题扩展而来。遵从该题的提法，将不依赖于别的物品的物品称为“主件”，依赖于某主件的物品称为“附件”。由这个问题的简化条件可知所有的物品由若干主件和依赖于每个主件的一个附件集合组成。</p>
+<p>按照背包问题的一般思路，仅考虑一个主件和它的附件集合。可是，可用的策略非常多，包括：一个也不选，仅选择主件，选择主件后再选择一个附件，选择主件后再选择两个附件……无法用状态转移方程来表示如此多的策略。（事实上，设有n个附件，则策略有2^n+1个，为指数级。）</p>
+<p>考虑到所有这些策略都是互斥的（也就是说，你只能选择一种策略），所以一个主件和它的附件集合实际上对应于P06中的一个物品组，每个选择了主件又选择了若干个附件的策略对应于这个物品组中的一个物品，其费用和价值都是这个策略中的物品的值的和。但仅仅是这一步转化并不能给出一个好的算法，因为物品组中的物品还是像原问题的策略一样多。</p>
+<p>再考虑P06中的一句话：可以对每组中的物品应用P02中“一个简单有效的优化”。这提示我们，对于一个物品组中的物品，所有费用相同的物品只留一个价值最大的，不影响结果。所以，我们可以对主件i的“附件集合”先进行一次01背包，得到费用依次为0..V-c[i]所有这些值时相应的最大价值f’[0..V-c[i]]。那么这个主件及它的附件集合相当于V-c[i]+1个物品的物品组，其中费用为c[i]+k的物品的价值为f’[k]+w[i]。也就是说原来指数级的策略中有很多策略都是冗余的，通过一次01背包后，将主件i转化为 V-c[i]+1个物品的物品组，就可以直接应用P06的算法解决问题了。</p>
+<h3 id="7-3-更一般的问题"><a href="#7-3-更一般的问题" class="headerlink" title="7.3.更一般的问题"></a>7.3.更一般的问题</h3><p>更一般的问题是：依赖关系以图论中“森林”的形式给出（森林即多叉树的集合），也就是说，主件的附件仍然可以具有自己的附件集合，限制只是每个物品最多只依赖于一个物品（只有一个主件）且不出现循环依赖。</p>
+<p>解决这个问题仍然可以用将每个主件及其附件集合转化为物品组的方式。唯一不同的是，由于附件可能还有附件，就不能将每个附件都看作一个一般的01 背包中的物品了。若这个附件也有附件集合，则它必定要被先转化为物品组，然后用分组的背包问题解出主件及其附件集合所对应的附件组中各个费用的附件所对应的价值。</p>
+<p>事实上，这是一种树形DP，其特点是每个父节点都需要对它的各个儿子的属性进行一次DP以求得自己的相关属性。这已经触及到了“泛化物品”的思想。看完P08后，你会发现这个“依赖关系树”每一个子树都等价于一件泛化物品，求某节点为根的子树对应的泛化物品相当于求其所有儿子的对应的泛化物品之和。</p>
+<h3 id="7-4-小结"><a href="#7-4-小结" class="headerlink" title="7.4.小结"></a>7.4.小结</h3><p>NOIP2006的那道背包问题我做得很失败，写了上百行的代码，却一分未得。后来我通过思考发现通过引入“物品组”和“依赖”的概念可以加深对这题的理解，还可以解决它的推广问题。用物品组的思想考虑那题中极其特殊的依赖关系：物品不能既作主件又作附件，每个主件最多有两个附件，可以发现一个主件和它的两个附件等价于一个由四个物品组成的物品组，这便揭示了问题的某种本质。</p>
+<p>我想说：失败不是什么丢人的事情，从失败中全无收获才是。</p>
+<h2 id="8-泛化物品"><a href="#8-泛化物品" class="headerlink" title="8.泛化物品"></a>8.泛化物品</h2><h3 id="8-1-定义"><a href="#8-1-定义" class="headerlink" title="8.1.定义"></a>8.1.定义</h3><p>考虑这样一种物品，它并没有固定的费用和价值，而是它的价值随着你分配给它的费用而变化。这就是泛化物品的概念。</p>
+<p>更严格的定义之。在背包容量为V的背包问题中，泛化物品是一个定义域为0..V中的整数的函数h，当分配给它的费用为v时，能得到的价值就是h(v)。</p>
+<p>这个定义有一点点抽象，另一种理解是一个泛化物品就是一个数组h[0..V]，给它费用v，可得到价值h[V]。</p>
+<p>一个费用为c价值为w的物品，如果它是01背包中的物品，那么把它看成泛化物品，它就是除了h(c)=w其它函数值都为0的一个函数。如果它是完全背包中的物品，那么它可以看成这样一个函数，仅当v被c整除时有h(v)=v/c<em>w，其它函数值均为0。如果它是多重背包中重复次数最多为n的物品，那么它对应的泛化物品的函数有h(v)=v/c</em>w仅当v被c整除且v/c&lt;=n，其它情况函数值均为0。</p>
+<p>一个物品组可以看作一个泛化物品h。对于一个0..V中的v，若物品组中不存在费用为v的的物品，则h(v)=0，否则h(v)为所有费用为v的物品的最大价值。P07中每个主件及其附件集合等价于一个物品组，自然也可看作一个泛化物品。</p>
+<h3 id="8-2-泛化物品的和"><a href="#8-2-泛化物品的和" class="headerlink" title="8.2.泛化物品的和"></a>8.2.泛化物品的和</h3><p>如果面对两个泛化物品h和l，要用给定的费用从这两个泛化物品中得到最大的价值，怎么求呢？事实上，对于一个给定的费用v，只需枚举将这个费用如何分配给两个泛化物品就可以了。同样的，对于0..V的每一个整数v，可以求得费用v分配到h和l中的最大价值f(v)。也即<code>f(v)=max&#123;h(k) +l(v-k)|0&lt;=k&lt;=v&#125;</code>。可以看到，f也是一个由泛化物品h和l决定的定义域为0..V的函数，也就是说，f是一个由泛化物品h和 l决定的泛化物品。</p>
+<p>由此可以定义泛化物品的和：h、l都是泛化物品，若泛化物品f满足<code>f(v)=max&#123;h(k)+l(v-k)|0&lt;=k&lt;=v&#125;</code>，则称f是h与l的和，即f=h+l。这个运算的时间复杂度是O(V^2)。</p>
+<p>泛化物品的定义表明：在一个背包问题中，若将两个泛化物品代以它们的和，不影响问题的答案。事实上，对于其中的物品都是泛化物品的背包问题，求它的答案的过程也就是求所有这些泛化物品之和的过程。设此和为s，则答案就是s[0..V]中的最大值。</p>
+<h3 id="8-3-背包问题的泛化物品"><a href="#8-3-背包问题的泛化物品" class="headerlink" title="8.3.背包问题的泛化物品"></a>8.3.背包问题的泛化物品</h3><p>一个背包问题中，可能会给出很多条件，包括每种物品的费用、价值等属性，物品之间的分组、依赖等关系等。但肯定能将问题对应于某个泛化物品。也就是说，给定了所有条件以后，就可以对每个非负整数v求得：若背包容量为v，将物品装入背包可得到的最大价值是多少，这可以认为是定义在非负整数集上的一件泛化物品。这个泛化物品——或者说问题所对应的一个定义域为非负整数的函数——包含了关于问题本身的高度浓缩的信息。一般而言，求得这个泛化物品的一个子域（例如0..V）的值之后，就可以根据这个函数的取值得到背包问题的最终答案。</p>
+<p>综上所述，一般而言，求解背包问题，即求解这个问题所对应的一个函数，即该问题的泛化物品。而求解某个泛化物品的一种方法就是将它表示为若干泛化物品的和然后求之。</p>
+<h3 id="8-4-小结"><a href="#8-4-小结" class="headerlink" title="8.4.小结"></a>8.4.小结</h3><p>本讲可以说都是我自己的原创思想。具体来说，是我在学习函数式编程的 Scheme 语言时，用函数编程的眼光审视各类背包问题得出的理论。这一讲真的很抽象，也许在“模型的抽象程度”这一方面已经超出了NOIP的要求，所以暂且看不懂也没关系。相信随着你的OI之路逐渐延伸，有一天你会理解的。</p>
+<p>我想说：“思考”是一个<code>OIer</code>最重要的品质。简单的问题，深入思考以后，也能发现更多。</p>
+<h2 id="9-背包问题问法的变化"><a href="#9-背包问题问法的变化" class="headerlink" title="9.背包问题问法的变化"></a>9.背包问题问法的变化</h2><p>以上涉及的各种背包问题都是要求在背包容量（费用）的限制下求可以取到的最大价值，但背包问题还有很多种灵活的问法，在这里值得提一下。但是我认为，只要深入理解了求背包问题最大价值的方法，即使问法变化了，也是不难想出算法的。</p>
+<p>例如，求解最多可以放多少件物品或者最多可以装满多少背包的空间。这都可以根据具体问题利用前面的方程求出所有状态的值（f数组）之后得到。</p>
+<p>还有，如果要求的是“总价值最小”“总件数最小”，只需简单的将上面的状态转移方程中的max改成min即可。</p>
+<p>下面说一些变化更大的问法。</p>
+<h3 id="9-1-输出方案"><a href="#9-1-输出方案" class="headerlink" title="9.1.输出方案"></a>9.1.输出方案</h3><p>一般而言，背包问题是要求一个最优值，如果要求输出这个最优值的方案，可以参照一般动态规划问题输出方案的方法：记录下每个状态的最优值是由状态转移方程的哪一项推出来的，换句话说，记录下它是由哪一个策略推出来的。便可根据这条策略找到上一个状态，从上一个状态接着向前推即可。</p>
+<p>还是以01背包为例，方程为<code>f[i][v]=max&#123;f[i-1][v],f[i-1][v-c[i]]+w[i]&#125;</code>。再用一个数组g[i] [v]，设<code>g[i][v]=0</code>表示推出<code>f[i</code>][v]的值时是采用了方程的前一项（也即<code>f[i][v]=f[i-1][v]</code>），<code>g[i][v]</code>表示采用了方程的后一项。注意这两项分别表示了两种策略：未选第i个物品及选了第i个物品。那么输出方案的伪代码可以这样写（设最终状态为<code>f[N</code>][V]）：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">i=N</span><br><span class="line">v=V</span><br><span class="line">while(i&gt;<span class="number">0</span>)</span><br><span class="line"><span class="keyword">if</span>(g[i][v]==<span class="number">0</span>)</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;未选第i项物品&quot;</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(g[i][v]==<span class="number">1</span>)</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;选了第i项物品&quot;</span></span><br><span class="line">v=v-c[i]</span><br></pre></td></tr></table></figure>
+
+<p>另外，采用方程的前一项或后一项也可以在输出方案的过程中根据f[i][v]的值实时地求出来，也即不须纪录g数组，将上述代码中的<code>g[i] [v]==0</code>改成<code>f[i][v]==f[i-1][v]</code>，<code>g[i][v]==1</code>改成<code>f[i][v]==f[i-1][v-c[i]]+w[i]</code>也可。</p>
+<h3 id="9-2-输出字典序最小的最优方案"><a href="#9-2-输出字典序最小的最优方案" class="headerlink" title="9.2.输出字典序最小的最优方案"></a>9.2.输出字典序最小的最优方案</h3><p>这里“字典序最小”的意思是1..N号物品的选择方案排列出来以后字典序最小。以输出01背包最小字典序的方案为例。</p>
+<p>一般而言，求一个字典序最小的最优方案，只需要在转移时注意策略。首先，子问题的定义要略改一些。我们注意到，如果存在一个选了物品1的最优方案，那么答案一定包含物品1，原问题转化为一个背包容量为v-c[1]，物品为2..N的子问题。反之，如果答案不包含物品1，则转化成背包容量仍为V，物品为2..N的子问题。不管答案怎样，子问题的物品都是以i..N而非前所述的1..i的形式来定义的，所以状态的定义和转移方程都需要改一下。但也许更简易的方法是先把物品逆序排列一下，以下按物品已被逆序排列来叙述。</p>
+<p>在这种情况下，可以按照前面经典的状态转移方程来求值，只是输出方案的时候要注意：从N到1输入时，如果<code>f[i][v]==f[i-v]</code>及<code>f[i][v]==f[i-1][f-c[i]]+w[i]</code>同时成立，应该按照后者（即选择了物品i）来输出方案。</p>
+<p>求方案总数<br>对于一个给定了背包容量、物品费用、物品间相互关系（分组、依赖等）的背包问题，除了再给定每个物品的价值后求可得到的最大价值外，还可以得到装满背包或将背包装至某一指定容量的方案总数。</p>
+<p>对于这类改变问法的问题，一般只需将状态转移方程中的max改成sum即可。例如若每件物品均是01背包中的物品，转移方程即为<code>f[i][v]=sum&#123;f[i-1][v],f[i-1][v-c[i]]+w[i]&#125;</code>，初始条件<code>f[0][0]=1</code>。</p>
+<p>事实上，这样做可行的原因在于状态转移方程已经考察了所有可能的背包组成方案。</p>
+<h3 id="9-3-最优方案的总数"><a href="#9-3-最优方案的总数" class="headerlink" title="9.3.最优方案的总数"></a>9.3.最优方案的总数</h3><p>这里的最优方案是指物品总价值最大的方案。还是以01背包为例。</p>
+<p>结合求最大总价值和方案总数两个问题的思路，最优方案的总数可以这样求：f[i][v]意义同前述，g[i][v]表示这个子问题的最优方案的总数，则在求f[i][v]的同时求g[i][v]的伪代码如下：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i=<span class="number">1.</span>.N</span><br><span class="line"><span class="keyword">for</span> v=<span class="number">0.</span>.V</span><br><span class="line">f[i][v]=max&#123;f[i<span class="number">-1</span>][v],f[i<span class="number">-1</span>][v-c[i]]+w[i]&#125;</span><br><span class="line">g[i][v]=<span class="number">0</span></span><br><span class="line"><span class="keyword">if</span>(f[i][v]==f[i<span class="number">-1</span>][v])</span><br><span class="line">inc(g[i][v],g[i<span class="number">-1</span>][v]</span><br><span class="line"><span class="keyword">if</span>(f[i][v]==f[i<span class="number">-1</span>][v-c[i]]+w[i])</span><br><span class="line">inc(g[i][v],g[i<span class="number">-1</span>][v-c[i]])</span><br></pre></td></tr></table></figure>
+
+<p>如果你是第一次看到这样的问题，请仔细体会上面的伪代码。</p>
+<h3 id="9-4-小结"><a href="#9-4-小结" class="headerlink" title="9.4.小结"></a>9.4.小结</h3><p>显然，这里不可能穷尽背包类动态规划问题所有的问法。甚至还存在一类将背包类动态规划问题与其它领域（例如数论、图论）结合起来的问题，在这篇论背包问题的专文中也不会论及。但只要深刻领会前述所有类别的背包问题的思路和状态转移方程，遇到其它的变形问法，只要题目难度还属于NOIP，应该也不难想出算法。</p>
+<p>触类旁通、举一反三，应该也是一个OIer应有的品质吧。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>背包九讲</tag>
+      </tags>
+  </entry>
+</search>
