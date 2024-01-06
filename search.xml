@@ -5,7 +5,7 @@
     <url>/2021/12/11/1.hello-world/</url>
     <content><![CDATA[<h2 id="hello-world"><a href="#hello-world" class="headerlink" title="hello world"></a>hello world</h2>]]></content>
       <categories>
-        <category>技术</category>
+        <category>随笔</category>
       </categories>
       <tags>
         <tag>开始</tag>
@@ -28,8 +28,7 @@
 
 <h2 id="2-解题思路及代码实现"><a href="#2-解题思路及代码实现" class="headerlink" title="2.解题思路及代码实现"></a>2.解题思路及代码实现</h2>]]></content>
       <categories>
-        <category>技术</category>
-        <category>算法</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>背包问题</tag>
@@ -121,7 +120,7 @@
 <h3 id="5-2-安装calico"><a href="#5-2-安装calico" class="headerlink" title="5.2.安装calico"></a>5.2.安装calico</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 获取calico网络插件配置yaml文件</span></span><br><span class="line">wget https://docs.projectcalico.org/manifests/calico.yaml</span><br><span class="line"></span><br><span class="line">kubectl apply -f calico.yaml</span><br><span class="line"></span><br><span class="line"><span class="comment">#安装成功后查看pod</span></span><br><span class="line">kubectl get pod -n kube-system</span><br><span class="line"></span><br><span class="line"><span class="comment">#全部Running则表示 成功了</span></span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>实践</category>
       </categories>
       <tags>
         <tag>k8s</tag>
@@ -142,7 +141,7 @@
 
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>实践</category>
       </categories>
       <tags>
         <tag>k8s</tag>
@@ -178,7 +177,7 @@
 
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>实践</category>
       </categories>
       <tags>
         <tag>k8s</tag>
@@ -209,7 +208,7 @@
 <p>这个过程完成后，双方就结束了本次通信。</p>
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>网络</tag>
@@ -308,7 +307,7 @@
 <p>注意，租内续约只需要请求和确认两个步骤。</p>
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>DHCP</tag>
@@ -426,7 +425,7 @@
 <p>上面是指DNS主备服务器之间信息同步的不同方案。</p>
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>DNS</tag>
@@ -449,7 +448,7 @@
 
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>go</tag>
@@ -473,7 +472,7 @@
 
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>go</tag>
@@ -491,7 +490,7 @@
 
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>go</tag>
@@ -542,7 +541,7 @@
 <h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p> 到此，一个简单的个人博客雏形就搭建完毕了。Next主体有许多美化配置，可以让我们的博客更好看。接下来就让我们来看看next的个性化配置。</p>
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>实践</category>
       </categories>
       <tags>
         <tag>hexo</tag>
@@ -562,7 +561,7 @@
 
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>go</tag>
@@ -586,7 +585,7 @@
 
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>go</tag>
@@ -687,7 +686,7 @@
 
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>go</tag>
@@ -705,7 +704,7 @@
 
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>go</tag>
@@ -721,7 +720,7 @@
 
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>go</tag>
@@ -743,7 +742,7 @@
 
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>go</tag>
@@ -767,7 +766,7 @@
 
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>go</tag>
@@ -814,7 +813,7 @@
 
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>go</tag>
@@ -877,7 +876,7 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 搜索</span><br><span class="line">search:</span><br><span class="line">  path: ./public/search.xml</span><br><span class="line">  field: post</span><br><span class="line">  format: html</span><br><span class="line">  limit: 10000</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>实践</category>
       </categories>
       <tags>
         <tag>hexo</tag>
@@ -896,8 +895,7 @@
 
 ]]></content>
       <categories>
-        <category>JavaScript</category>
-        <category>工具使用</category>
+        <category>实践</category>
       </categories>
       <tags>
         <tag>nodejs</tag>
@@ -943,7 +941,7 @@
 </tbody></table>
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>网络</tag>
@@ -970,7 +968,7 @@
 
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>实践</category>
       </categories>
       <tags>
         <tag>go</tag>
@@ -1002,7 +1000,7 @@
 
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>go</tag>
@@ -1030,8 +1028,7 @@
 
 ]]></content>
       <categories>
-        <category>技术</category>
-        <category>算法</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>go</tag>
@@ -1142,7 +1139,7 @@
 <p>触类旁通、举一反三，应该也是一个OIer应有的品质吧。</p>
 ]]></content>
       <categories>
-        <category>技术</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>算法</tag>
