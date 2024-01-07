@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2021/12/11/1.hello-world/</url>
-    <content><![CDATA[<h2 id="hello-world"><a href="#hello-world" class="headerlink" title="hello world"></a>hello world</h2>]]></content>
-      <categories>
-        <category>随笔</category>
-      </categories>
-      <tags>
-        <tag>开始</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>多重背包问题(go实现)</title>
     <url>/2023/02/27/10.%E5%A4%9A%E9%87%8D%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98-go%E5%AE%9E%E7%8E%B0/</url>
     <content><![CDATA[<h1 id="多重背包问题"><a href="#多重背包问题" class="headerlink" title="多重背包问题"></a>多重背包问题</h1><h2 id="1-问题"><a href="#1-问题" class="headerlink" title="1.问题"></a>1.问题</h2><p>有 N 种物品和一个容量是 V 的背包。</p>
@@ -33,6 +22,17 @@
       <tags>
         <tag>背包问题</tag>
         <tag>go</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2021/12/11/1.hello-world/</url>
+    <content><![CDATA[<h2 id="hello-world"><a href="#hello-world" class="headerlink" title="hello world"></a>hello world</h2>]]></content>
+      <categories>
+        <category>随笔</category>
+      </categories>
+      <tags>
+        <tag>开始</tag>
       </tags>
   </entry>
   <entry>
@@ -480,24 +480,6 @@
       </tags>
   </entry>
   <entry>
-    <title>go访问数据库</title>
-    <url>/2023/12/27/19.go%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93/</url>
-    <content><![CDATA[<h2 id="go访问数据库"><a href="#go访问数据库" class="headerlink" title="go访问数据库"></a>go访问数据库</h2><p>提前准备的数据表结构：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `userinfo` (</span><br><span class="line">	`uid` <span class="type">INT</span>(<span class="number">10</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,</span><br><span class="line">	`username` <span class="type">VARCHAR</span> ( <span class="number">64</span> ) <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">	`departname` <span class="type">VARCHAR</span> ( <span class="number">64</span> ) <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">	`created` <span class="type">DATE</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line"><span class="keyword">PRIMARY</span> KEY ( `uid` ) </span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `userdetail` (</span><br><span class="line">	`uid` <span class="type">INT</span> ( <span class="number">10</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="number">0</span>,</span><br><span class="line">	`intro` TEXT <span class="keyword">NULL</span>,</span><br><span class="line">	`profile` TEXT <span class="keyword">NULL</span>,</span><br><span class="line"><span class="keyword">PRIMARY</span> KEY ( `uid` ) </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-go操作MySQL数据库"><a href="#1-go操作MySQL数据库" class="headerlink" title="1.go操作MySQL数据库"></a>1.go操作MySQL数据库</h3><p>案例使用的是github.com/go-sql-driver/mysql的MySQL驱动，该驱动完全支持database/sql接口，支持keepalive。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;database/sql&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 注册driver</span></span><br><span class="line">	_ <span class="string">&quot;github.com/go-sql-driver/mysql&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 连接数据库</span></span><br><span class="line">	db, _ := sql.Open(<span class="string">&quot;mysql&quot;</span>, <span class="string">&quot;root:123456@tcp(127.0.0.1:3306)/test?charset=utf8&quot;</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 增</span></span><br><span class="line">	stmt, _ := db.Prepare(<span class="string">&quot;INSERT userinfo SET username=?,departname=?,created=?&quot;</span>)</span><br><span class="line">	res, _ := stmt.Exec(<span class="string">&quot;mebaron&quot;</span>, <span class="string">&quot;研发部门&quot;</span>, time.Now())</span><br><span class="line"></span><br><span class="line">	id, _ := res.LastInsertId()</span><br><span class="line">	fmt.Printf(<span class="string">&quot;id: %v\n&quot;</span>, id)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 删</span></span><br><span class="line">	stmt, _ = db.Prepare(<span class="string">&quot;delete from userinfo where uid=?&quot;</span>)</span><br><span class="line">	res, _ = stmt.Exec(id - <span class="number">3</span>)</span><br><span class="line">	effect, _ := res.RowsAffected()</span><br><span class="line">	fmt.Printf(<span class="string">&quot;delete effect: %v\n&quot;</span>, effect)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 改</span></span><br><span class="line">	stmt, _ = db.Prepare(<span class="string">&quot;update userinfo set username=? where uid=?&quot;</span>)</span><br><span class="line">	res, _ = stmt.Exec(<span class="string">&quot;baron&quot;</span>, id)</span><br><span class="line"></span><br><span class="line">	effect, _ = res.RowsAffected()</span><br><span class="line">	fmt.Printf(<span class="string">&quot;update effect: %v\n&quot;</span>, effect)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 查</span></span><br><span class="line">	rows, _ := db.Query(<span class="string">&quot;select * from userinfo&quot;</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> rows.Next() &#123;</span><br><span class="line">		<span class="keyword">var</span> (</span><br><span class="line">			uid        <span class="type">int</span></span><br><span class="line">			username   <span class="type">string</span></span><br><span class="line">			departname <span class="type">string</span></span><br><span class="line">			created    <span class="type">string</span></span><br><span class="line">		)</span><br><span class="line">		rows.Scan(&amp;uid, &amp;username, &amp;departname, &amp;created)</span><br><span class="line">		fmt.Println(uid, username, departname, created)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 事务</span></span><br><span class="line">	tx, _ := db.Begin()</span><br><span class="line">	stmt, _ = tx.Prepare(<span class="string">&quot;INSERT userinfo SET username=?,departname=?,created=?&quot;</span>)</span><br><span class="line">	res, _ = stmt.Exec(<span class="string">&quot;tx&quot;</span>, <span class="string">&quot;测试部门&quot;</span>, time.Now())</span><br><span class="line">	id, _ = res.LastInsertId()</span><br><span class="line">	fmt.Printf(<span class="string">&quot;id: %v\n&quot;</span>, id)</span><br><span class="line">	res, _ = tx.Stmt(stmt).Exec(<span class="string">&quot;tx-baron&quot;</span>, <span class="string">&quot;测试1部门&quot;</span>, time.Now())</span><br><span class="line">	id, _ = res.LastInsertId()</span><br><span class="line">	fmt.Printf(<span class="string">&quot;id: %v\n&quot;</span>, id)</span><br><span class="line"></span><br><span class="line">	stmt, _ = tx.Prepare(<span class="string">&quot;INSERT userdetail SET uid=?,intro=?,profile=?&quot;</span>)</span><br><span class="line">	stmt.Exec(id, <span class="string">&quot;intro text&quot;</span>, <span class="string">&quot;profile text&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 事务必须以对Commit或Rollback的调用结束。调用Commit或Rollback后，一旦出现某部分失败，所有对事务的操作都会失败并返回错误值ErrTxDone</span></span><br><span class="line">	tx.Commit()</span><br><span class="line">	<span class="comment">// tx.Rollback()</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-      </categories>
-      <tags>
-        <tag>go</tag>
-        <tag>mysql</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>使用hexo搭建个人博客</title>
     <url>/2021/12/11/2.%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
     <content><![CDATA[<h1 id="使用hexo搭建个人博客"><a href="#使用hexo搭建个人博客" class="headerlink" title="使用hexo搭建个人博客"></a>使用hexo搭建个人博客</h1><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p> 目前使用hexo配合github来搭建个人博客十分常见，最近摸索了下相关技术，使用hexo➕GitHub搭建了个人博客，并且使用到了next主题，在此做个总结。</p>
@@ -547,6 +529,24 @@
         <tag>hexo</tag>
         <tag>next</tag>
         <tag>博客</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>go访问数据库</title>
+    <url>/2023/12/27/19.go%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%BA%93/</url>
+    <content><![CDATA[<h2 id="go访问数据库"><a href="#go访问数据库" class="headerlink" title="go访问数据库"></a>go访问数据库</h2><p>提前准备的数据表结构：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `userinfo` (</span><br><span class="line">	`uid` <span class="type">INT</span>(<span class="number">10</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,</span><br><span class="line">	`username` <span class="type">VARCHAR</span> ( <span class="number">64</span> ) <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">	`departname` <span class="type">VARCHAR</span> ( <span class="number">64</span> ) <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line">	`created` <span class="type">DATE</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,</span><br><span class="line"><span class="keyword">PRIMARY</span> KEY ( `uid` ) </span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `userdetail` (</span><br><span class="line">	`uid` <span class="type">INT</span> ( <span class="number">10</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="number">0</span>,</span><br><span class="line">	`intro` TEXT <span class="keyword">NULL</span>,</span><br><span class="line">	`profile` TEXT <span class="keyword">NULL</span>,</span><br><span class="line"><span class="keyword">PRIMARY</span> KEY ( `uid` ) </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-go操作MySQL数据库"><a href="#1-go操作MySQL数据库" class="headerlink" title="1.go操作MySQL数据库"></a>1.go操作MySQL数据库</h3><p>案例使用的是github.com/go-sql-driver/mysql的MySQL驱动，该驱动完全支持database/sql接口，支持keepalive。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;database/sql&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 注册driver</span></span><br><span class="line">	_ <span class="string">&quot;github.com/go-sql-driver/mysql&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 连接数据库</span></span><br><span class="line">	db, _ := sql.Open(<span class="string">&quot;mysql&quot;</span>, <span class="string">&quot;root:123456@tcp(127.0.0.1:3306)/test?charset=utf8&quot;</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 增</span></span><br><span class="line">	stmt, _ := db.Prepare(<span class="string">&quot;INSERT userinfo SET username=?,departname=?,created=?&quot;</span>)</span><br><span class="line">	res, _ := stmt.Exec(<span class="string">&quot;mebaron&quot;</span>, <span class="string">&quot;研发部门&quot;</span>, time.Now())</span><br><span class="line"></span><br><span class="line">	id, _ := res.LastInsertId()</span><br><span class="line">	fmt.Printf(<span class="string">&quot;id: %v\n&quot;</span>, id)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 删</span></span><br><span class="line">	stmt, _ = db.Prepare(<span class="string">&quot;delete from userinfo where uid=?&quot;</span>)</span><br><span class="line">	res, _ = stmt.Exec(id - <span class="number">3</span>)</span><br><span class="line">	effect, _ := res.RowsAffected()</span><br><span class="line">	fmt.Printf(<span class="string">&quot;delete effect: %v\n&quot;</span>, effect)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 改</span></span><br><span class="line">	stmt, _ = db.Prepare(<span class="string">&quot;update userinfo set username=? where uid=?&quot;</span>)</span><br><span class="line">	res, _ = stmt.Exec(<span class="string">&quot;baron&quot;</span>, id)</span><br><span class="line"></span><br><span class="line">	effect, _ = res.RowsAffected()</span><br><span class="line">	fmt.Printf(<span class="string">&quot;update effect: %v\n&quot;</span>, effect)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 查</span></span><br><span class="line">	rows, _ := db.Query(<span class="string">&quot;select * from userinfo&quot;</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> rows.Next() &#123;</span><br><span class="line">		<span class="keyword">var</span> (</span><br><span class="line">			uid        <span class="type">int</span></span><br><span class="line">			username   <span class="type">string</span></span><br><span class="line">			departname <span class="type">string</span></span><br><span class="line">			created    <span class="type">string</span></span><br><span class="line">		)</span><br><span class="line">		rows.Scan(&amp;uid, &amp;username, &amp;departname, &amp;created)</span><br><span class="line">		fmt.Println(uid, username, departname, created)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 事务</span></span><br><span class="line">	tx, _ := db.Begin()</span><br><span class="line">	stmt, _ = tx.Prepare(<span class="string">&quot;INSERT userinfo SET username=?,departname=?,created=?&quot;</span>)</span><br><span class="line">	res, _ = stmt.Exec(<span class="string">&quot;tx&quot;</span>, <span class="string">&quot;测试部门&quot;</span>, time.Now())</span><br><span class="line">	id, _ = res.LastInsertId()</span><br><span class="line">	fmt.Printf(<span class="string">&quot;id: %v\n&quot;</span>, id)</span><br><span class="line">	res, _ = tx.Stmt(stmt).Exec(<span class="string">&quot;tx-baron&quot;</span>, <span class="string">&quot;测试1部门&quot;</span>, time.Now())</span><br><span class="line">	id, _ = res.LastInsertId()</span><br><span class="line">	fmt.Printf(<span class="string">&quot;id: %v\n&quot;</span>, id)</span><br><span class="line"></span><br><span class="line">	stmt, _ = tx.Prepare(<span class="string">&quot;INSERT userdetail SET uid=?,intro=?,profile=?&quot;</span>)</span><br><span class="line">	stmt.Exec(id, <span class="string">&quot;intro text&quot;</span>, <span class="string">&quot;profile text&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 事务必须以对Commit或Rollback的调用结束。调用Commit或Rollback后，一旦出现某部分失败，所有对事务的操作都会失败并返回错误值ErrTxDone</span></span><br><span class="line">	tx.Commit()</span><br><span class="line">	<span class="comment">// tx.Rollback()</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>go</tag>
+        <tag>mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -904,6 +904,33 @@
       </tags>
   </entry>
   <entry>
+    <title>go交叉编译(Mac/Linux/Windows)</title>
+    <url>/2023/02/25/6.go%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91-Mac-Linux-Windows/</url>
+    <content><![CDATA[<h1 id="go交叉编译-Mac-Linux-Windows"><a href="#go交叉编译-Mac-Linux-Windows" class="headerlink" title="go交叉编译(Mac/Linux/Windows)"></a>go交叉编译(Mac/Linux/Windows)</h1><h2 id="1、MAC-下编译-Linux-、Windows"><a href="#1、MAC-下编译-Linux-、Windows" class="headerlink" title="1、MAC 下编译 Linux 、Windows"></a>1、MAC 下编译 Linux 、Windows</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#linux</span></span><br><span class="line"></span><br><span class="line">CGO_ENABLED=0 GOOS=linux GOARCH=amd64  go build  -o name   main.go</span><br></pre></td></tr></table></figure>
+
+<hr>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#windows</span></span><br><span class="line"></span><br><span class="line">CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build  -o name  main.go</span><br></pre></td></tr></table></figure>
+
+<h2 id="2、Linux-下编译-Mac、-Windows"><a href="#2、Linux-下编译-Mac、-Windows" class="headerlink" title="2、Linux 下编译 Mac、 Windows"></a>2、Linux 下编译 Mac、 Windows</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#Mac</span></span><br><span class="line"></span><br><span class="line">CGO_ENABLED=0 GOOS=darwin GOARCH=amd64  go build  -o name   main.go</span><br></pre></td></tr></table></figure>
+
+<hr>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#Windows</span></span><br><span class="line"></span><br><span class="line">CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build  -o name   main.go</span><br></pre></td></tr></table></figure>
+
+<h2 id="3、Windows-下编译-Mac-、Linux"><a href="#3、Windows-下编译-Mac-、Linux" class="headerlink" title="3、Windows 下编译 Mac 、Linux"></a>3、Windows 下编译 Mac 、Linux</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#Mac</span></span><br><span class="line"></span><br><span class="line">SET CGO_ENABLED=0</span><br><span class="line"></span><br><span class="line">SET GOOS=darwin</span><br><span class="line"></span><br><span class="line">SET GOARCH=amd64</span><br><span class="line"></span><br><span class="line">go build  -o name   main.go</span><br></pre></td></tr></table></figure>
+
+<hr>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#Linux</span></span><br><span class="line"></span><br><span class="line">SET CGO_ENABLED=0</span><br><span class="line"></span><br><span class="line">SET GOOS=linux</span><br><span class="line"></span><br><span class="line">SET GOARCH=amd64</span><br><span class="line"></span><br><span class="line">go build  -o name   main.go</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>实践</category>
+      </categories>
+      <tags>
+        <tag>go</tag>
+        <tag>build</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>七层OSI模型</title>
     <url>/2023/12/21/5.%E4%B8%83%E5%B1%82OSI%E6%A8%A1%E5%9E%8B/</url>
     <content><![CDATA[<h2 id="七层OSI模型"><a href="#七层OSI模型" class="headerlink" title="七层OSI模型"></a>七层OSI模型</h2><p>七层OSI模型有应用层、表示层、会话层、传输层、网络层、数据链路层、物理层；各个层次上的典型网络协议如下：</p>
@@ -946,33 +973,6 @@
       <tags>
         <tag>网络</tag>
         <tag>osi</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>go交叉编译(Mac/Linux/Windows)</title>
-    <url>/2023/02/25/6.go%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91-Mac-Linux-Windows/</url>
-    <content><![CDATA[<h1 id="go交叉编译-Mac-Linux-Windows"><a href="#go交叉编译-Mac-Linux-Windows" class="headerlink" title="go交叉编译(Mac/Linux/Windows)"></a>go交叉编译(Mac/Linux/Windows)</h1><h2 id="1、MAC-下编译-Linux-、Windows"><a href="#1、MAC-下编译-Linux-、Windows" class="headerlink" title="1、MAC 下编译 Linux 、Windows"></a>1、MAC 下编译 Linux 、Windows</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#linux</span></span><br><span class="line"></span><br><span class="line">CGO_ENABLED=0 GOOS=linux GOARCH=amd64  go build  -o name   main.go</span><br></pre></td></tr></table></figure>
-
-<hr>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#windows</span></span><br><span class="line"></span><br><span class="line">CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build  -o name  main.go</span><br></pre></td></tr></table></figure>
-
-<h2 id="2、Linux-下编译-Mac、-Windows"><a href="#2、Linux-下编译-Mac、-Windows" class="headerlink" title="2、Linux 下编译 Mac、 Windows"></a>2、Linux 下编译 Mac、 Windows</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#Mac</span></span><br><span class="line"></span><br><span class="line">CGO_ENABLED=0 GOOS=darwin GOARCH=amd64  go build  -o name   main.go</span><br></pre></td></tr></table></figure>
-
-<hr>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#Windows</span></span><br><span class="line"></span><br><span class="line">CGO_ENABLED=0 GOOS=windows GOARCH=amd64  go build  -o name   main.go</span><br></pre></td></tr></table></figure>
-
-<h2 id="3、Windows-下编译-Mac-、Linux"><a href="#3、Windows-下编译-Mac-、Linux" class="headerlink" title="3、Windows 下编译 Mac 、Linux"></a>3、Windows 下编译 Mac 、Linux</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#Mac</span></span><br><span class="line"></span><br><span class="line">SET CGO_ENABLED=0</span><br><span class="line"></span><br><span class="line">SET GOOS=darwin</span><br><span class="line"></span><br><span class="line">SET GOARCH=amd64</span><br><span class="line"></span><br><span class="line">go build  -o name   main.go</span><br></pre></td></tr></table></figure>
-
-<hr>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#Linux</span></span><br><span class="line"></span><br><span class="line">SET CGO_ENABLED=0</span><br><span class="line"></span><br><span class="line">SET GOOS=linux</span><br><span class="line"></span><br><span class="line">SET GOARCH=amd64</span><br><span class="line"></span><br><span class="line">go build  -o name   main.go</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>实践</category>
-      </categories>
-      <tags>
-        <tag>go</tag>
-        <tag>build</tag>
       </tags>
   </entry>
   <entry>
