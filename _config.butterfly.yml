@@ -88,12 +88,20 @@ cover:
   # When cover is not set, the default cover is displayed (當沒有設置cover時，默認的封面顯示)
   default_cover:
     # - https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg
+    - /img/cover.jpg
     - /img/cover01.jpg
     - /img/cover02.jpg
     - /img/cover03.jpg
     - /img/cover04.jpg
     - /img/cover05.jpg
-    - /img/cover06.png
+    - /img/cover06.jpg
+    - /img/cover07.jpg
+    - /img/cover08.jpg
+    - /img/cover09.jpg
+    - /img/cover10.jpg
+    - /img/cover11.jpg
+    - /img/cover12.jpg
+    
 
 # Replace Broken Images (替換無法顯示的圖片)
 error_img:
